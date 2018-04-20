@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd "
+       default-lazy-init="true">
+
+    <!--TODO 此处后面要做成统一配置管理，不需要多个定义-->
+    <!-- 分页监听 -->
+    <bean id="paginationInterceptor" class="com.yinian.autooa.interceptor.PageInterceptor">
+        <property name="databaseType" value="mysql" />
+    </bean>
+
+    <!-- Spring、MyBatis的整合，需要在 Spring 应用上下文中定义至少两样东西：一个SqlSessionFactory和至少一个数据映射器类（UserMapper->iocContext.xml）。 -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <!-- -->
+        <property name="configLocation" value="classpath:SqlMapConfig.xml" />
+        <property name="dataSource" ref="masterDataSource" />
+        <!-- mapper和resultmap配置路径 -->
+        <property name="mapperLocations">
+            <list>
+                <value>classpath:mybatis/autocode/*.xml</value>
+                <value>classpath:mybatis/custom/*.xml</value>
+            </list>
+        </property>
+
+        <property name="plugins" ref="paginationInterceptor" />
+        <!-- 分页类 -->
+        <property name="typeAliases">
+            <list>
+                <value>com.yinian.autooa.common.AutoPage</value>
+            </list>
+        </property>
+    </bean>
+
+    <!-- 通过扫描的模式，扫描目录在com.idohoo.o2o.autocode 目录下，所有的mapper都继承SqlMapper接口的接口， 这样一个bean就可以了 -->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
+        <property name="basePackage" value="com.yinian.autooa.dao.autocode,
+                                        com.yinian.autooa.dao.custom"/>
+        <property name="sqlSessionFactoryBeanName" value="sqlSessionFactory" />
+    </bean>
+
+</beans>

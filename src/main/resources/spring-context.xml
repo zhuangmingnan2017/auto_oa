@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns="http://www.springframework.org/schema/beans"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:aop="http://www.springframework.org/schema/aop"
+	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+     http://www.springframework.org/schema/context
+     http://www.springframework.org/schema/context/spring-context-4.0.xsd
+ 	 http://www.springframework.org/schema/aop
+     http://www.springframework.org/schema/aop/spring-aop-4.0.xsd">
+
+    <!-- 启动springAOP代理类生成切面 -->
+	<aop:aspectj-autoproxy proxy-target-class="true" />
+	<context:annotation-config />
+    <!-- spring扫包 -->
+    <context:component-scan base-package="com.yinian.autooa" >
+        <context:exclude-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!--spring mvc 的配置-->
+    <import resource="web-servlet.xml" />
+
+    <!-- java properties config -->
+	<bean id="configProperties" class="org.springframework.beans.factory.config.PropertiesFactoryBean">
+		<property name="locations">
+			<list>
+				<value>classpath*:conf/*.properties</value>
+			</list>
+		</property>
+		<property name="fileEncoding" value="UTF-8" />
+	</bean>
+    <!-- ${}属性替换-->
+	<bean id="propertyConfigurer" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+		<property name="properties" ref="configProperties" />
+	</bean>
+
+    <!-- persistent db -->
+	<import resource="spring/db/spring-db.xml" />
+	<import resource="spring/db/spring-dao.xml" />
+
+	<!--activiti-->
+	<import resource="spring/spring-activiti.xml" />
+
+	<!--shiro-->
+	<import resource="spring/spring-shiro.xml" />
+
+    <!-- spring 线程池管理 -->
+    <bean id="taskExecutor" class="org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor">
+        <property name="corePoolSize" value="5" /> <!-- 线程池维护线程的最少数量 -->
+        <property name="maxPoolSize" value="200" /> <!-- 线程池维护线程的最大数量 -->
+        <property name="keepAliveSeconds" value="200" /> <!-- 线程池维护线程所允许的空闲时间 -->
+        <property name="queueCapacity" value="500" /> <!-- 线程池所使用的缓冲队列 -->
+    </bean>
+
+    <!-- 未认证或未授权时跳转必须在springmvc里面配，spring-shiro里的shirofilter配不生效 -->
+    <bean   class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
+        <property name="exceptionMappings">
+            <props>
+                <!--表示捕获的异常 -->
+                <prop key="org.apache.shiro.authz.UnauthorizedException">
+                    <!--捕获该异常时跳转的路径 -->
+                    /403
+                </prop>
+                <!--表示捕获的异常 -->
+                <prop key="org.apache.shiro.authz.UnauthenticatedException">
+                    <!--捕获该异常时跳转的路径 -->
+                    /403
+                </prop>
+            </props>
+        </property>
+    </bean>
+
+</beans>

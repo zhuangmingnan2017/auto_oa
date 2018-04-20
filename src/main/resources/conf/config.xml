@@ -1,0 +1,154 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<config>
+	<!-- 带 (*) 的表示必须配置 -->
+	
+	<!-- 服务器配置 (*), 服务器名称必须是 英文字母+数字 的形式 -->
+	<system_domain value=".vipshop.com" />
+	
+	<!-- 每页显示记录数 -->
+	<page_size value="15" />
+	
+	<!-- 显示最大记录数 -->
+	<page_max_size value="1000" />
+	
+	<!-- 是否使用本地cache,true使用，false 不使用 -->
+	<local_cache value="true"/>
+
+    <!-- 用户导入模板文件 -->
+    <user_template_dir value="/WEB-INF/template/user_template.xls" />
+    <imp_price_adjust_template value="/WEB-INF/template/imp_price_adjust_template.xls" />
+    <imp_user_template value="/WEB-INF/template/imp_user_template.xls" />
+    <imp_integral_template value="/WEB-INF/template/imp_integral_template.xls" />
+    <imp_stock_adjust_template value="/WEB-INF/template/imp_stock_adjust_template.xls" />
+    <imp_product_template value="/WEB-INF/template/imp_product_template.xls" />
+    <imp_balance_template value="/WEB-INF/template/imp_balance_template.xls" />
+    <imp_category_template value="/WEB-INF/template/imp_category_template.xls" />
+    <imp_count_card_template value="/WEB-INF/template/imp_countCard_template.xls" />
+    <imp_deposit_template value="/WEB-INF/template/imp_deposit_template.xls" />
+    <imp_supplier_template value="/WEB-INF/template/imp_supplier_template.xls" />
+    <imp_wholesale_template value="/WEB-INF/template/imp_wholesale_template.xls" />
+    <imp_babyInfo_template value="/WEB-INF/template/imp_babyInfo_template.xls" />
+    <imp_order_template value="/WEB-INF/template/imp_order_template.xls" />
+    <imp_store_card_template value="/WEB-INF/template/imp_storeCard_template.xls" />
+    <imp_receipt_order_template value="/WEB-INF/template/imp_receipt_order_template.xls" />
+    <imp_prod_brand_template value="/WEB-INF/template/imp_prod_brand_template.xls" />
+    <imp_batch_prod_template value="/WEB-INF/template/imp_batch_prod_template.xls" />
+    <imp_prod_batch_template value="/WEB-INF/template/imp_prod_batch_template.xls" />
+    <imp_batch_deposit_template value="/WEB-INF/template/imp_batch_deposit_template.xls" />
+    <imp_batch_stock_adjust_template value="/WEB-INF/template/imp_batch_stock_adjust_template.xls" />
+    <imp_reward_integral_template value = "/WEB-INF/template/imp_reward_integral_template.xls" />
+    <imp_exchange_integral_template value = "/WEB-INF/template/imp_exchange_integral_template.xls" />
+    <imp_pc_store_card_template value="/WEB-INF/template/imp_storeCard_template.xls" />
+
+    <!-- 模板控制行数控制 -->
+    <default_explain_line_number value="1" /><!-- default = 1 -->
+    <setting_explain_line_number value="2" /><!-- setting -->
+    <!-- 匹配该前缀则跳过 setting_explain_line_number 设置的行数 -->
+    <explain_text_prefix value="*导入说明"/>
+
+    <!-- 导出的tag-->
+    <export_tag>
+        exp_product,exp_erp_check_miss,exp_erp_check_diff,exp_erp_check_detail,exp_receipt_detail
+        ,exp_return_detail,exp_stock_detail ,exp_hstock_detail,exp_allot_detail,exp_kpi_sales_detail
+        ,exp_prod_category,exp_supplier_sum,exp_goods_sales,exp_ent_gross_prof,exp_company_gross_prof,exp_day_gross_prof
+        ,exp_brand_gross_prof,exp_cls2_gross_prof,exp_cls3_gross_prof,exp_cls4_gross_prof,exp_store_sales
+        ,exp_store_give_prof,exp_cls2_give_prof,exp_cls3_give_prof,exp_cls4_give_prof,exp_brand_give_prof
+        ,exp_supplier_sales,exp_purchase_order,erp_receipt_order,exp_company_info,exp_store_info,exp_store_terminal
+        ,erp_return_order,erp_receipted_order,erp_returned_order,erp_user_search,exp_user_consume,erp_wholesale_order
+        ,exp_user_class_consume,exp_user_brand_consume,erp_wholesaled_order
+        ,exp_store_card_recharge,exp_salesman_ent_sales,exp_user_amount_recharge,erp_wholesaled_order_detail
+        ,exp_user_amount_consume,exp_salesman_store_sales,exp_care_user,exp_salesman_class_sales,exp_salesman_brand_sales
+        ,exp_apply_allot,exp_apply_detail,exp_product_store_card_recharge,exp_product_store_card_consume
+        ,exp_project_store_card_recharge,exp_project_store_card_consume,exp_project_store_card_freeze
+        ,exp_project_store_card_unfreeze,exp_user,exp_erp_reaudit_receiptOrder,exp_erp_reaudit_returnOrder
+        ,exp_stock_no_retail,exp_receipt_no_retail,exp_supplier_detail,exp_wholesale_store,exp_sum_user_order_day
+		,exp_sum_user_order_hour
+        ,exp_new_product_store_card_recharge,exp_new_product_store_card_consume,exp_new_project_store_card_recharge
+        ,exp_new_project_store_card_consume,exp_new_project_store_card_freeze,exp_new_project_store_card_unfreeze
+        ,exp_sum_user_order_month,exp_month_retail_comparison,exp_per_sale_day,exp_wholesale_profit,exp_per_sale_month
+        ,exp_out_of_storage_detail
+        ,exp_sum_user_order_month,exp_month_retail_comparison,exp_per_sale_day,exp_wholesale_profit,exp_per_sale_month
+        ,exp_sum_user_order_month,exp_month_retail_comparison,exp_per_sale_day,exp_wholesale_profit,exp_per_sale_month
+        ,exp_user_baby_birthday,exp_sum_retail_goods_day,exp_sum_stock_prod_day,exp_brand_sum,exp_sum_retail_goods_month
+        ,exp_sum_retail_goods_class
+        <!--exp_apply_detail_out,exp_apply_detail_in-->
+    </export_tag>
+    <!-- 需要下载的tag -->
+    <export_schedule_tag>
+        exp_product, exp_erp_check_miss ,exp_erp_check_diff,exp_erp_check_detail,exp_receipt_detail
+        ,exp_return_detail,exp_stock_detail ,exp_hstock_detail,exp_allot_detail,exp_kpi_sales_detail
+        ,exp_goods_sales,exp_ent_gross_prof,exp_company_gross_prof,exp_day_gross_prof,exp_brand_gross_prof
+        ,exp_cls2_gross_prof,exp_cls3_gross_prof,exp_cls4_gross_prof,exp_store_sales
+        ,exp_store_give_prof,exp_cls2_give_prof,exp_cls3_give_prof,exp_cls4_give_prof
+        ,exp_brand_give_prof,exp_supplier_sales,exp_purchase_order,erp_receipt_order
+        ,erp_return_order,erp_receipted_order,erp_returned_order,erp_user_search,exp_user_consume
+        ,exp_user_class_consume,exp_user_brand_consume,erp_wholesale_order,erp_wholesaled_order
+        ,exp_store_card_recharge,exp_salesman_ent_sales,exp_user_amount_recharge,erp_wholesaled_order_detail
+        ,exp_user_amount_consume,exp_salesman_store_sales,exp_care_user,exp_salesman_class_sales,exp_salesman_brand_sales
+        ,exp_apply_allot,exp_apply_detail,exp_product_store_card_recharge,exp_product_store_card_consume
+        ,exp_project_store_card_recharge,exp_project_store_card_consume,exp_project_store_card_freeze
+        ,exp_project_store_card_unfreeze,exp_user,exp_erp_reaudit_receiptOrder,exp_erp_reaudit_returnOrder
+        ,exp_stock_no_retail,exp_receipt_no_retail,exp_supplier_detail,exp_wholesale_store,exp_sum_user_order_day
+        ,exp_sum_user_order_hour
+        ,exp_new_product_store_card_recharge,exp_new_product_store_card_consume,exp_new_project_store_card_recharge
+        ,exp_new_project_store_card_consume,exp_new_project_store_card_freeze,exp_new_project_store_card_unfreeze
+        ,exp_sum_user_order_month,exp_month_retail_comparison,exp_per_sale_day,exp_wholesale_profit,exp_per_sale_month
+        ,exp_out_of_storage_detail
+        ,exp_user_baby_birthday,exp_sum_retail_goods_day,exp_sum_stock_prod_day,exp_brand_sum,exp_sum_retail_goods_month
+        ,exp_sum_retail_goods_class
+      <!--  ,exp_apply_detail_out,exp_apply_detail_in-->
+    </export_schedule_tag>
+    <!-- 企业/门店/加盟店 导出的所有tag -->
+    <company_export_tag> 
+        exp_product, exp_erp_check_miss ,exp_erp_check_diff,exp_erp_check_detail,exp_receipt_detail
+        ,exp_return_detail,exp_stock_detail ,exp_hstock_detail,exp_allot_detail,exp_kpi_sales_detail
+        ,exp_prod_category,exp_supplier,exp_goods_sales,exp_ent_gross_prof,exp_company_gross_prof,exp_day_gross_prof
+        ,exp_brand_gross_prof,exp_cls2_gross_prof,exp_cls3_gross_prof,exp_cls4_gross_prof,exp_store_sales
+        ,exp_store_give_prof,exp_cls2_give_prof,exp_cls3_give_prof,exp_cls4_give_prof,exp_brand_give_prof
+        ,exp_supplier_sales,exp_purchase_order,erp_receipt_order,erp_return_order,erp_receipted_order
+        ,erp_returned_order,erp_user_search,exp_user_consume,erp_wholesale_order,exp_user_class_consume
+        ,exp_user_brand_consume,erp_wholesaled_order,erp_wholesaled_order_detail,exp_user_amount_recharge
+        ,exp_user_amount_consume,exp_salesman_ent_sales,exp_salesman_store_sales,exp_care_user,exp_salesman_class_sales
+        ,exp_salesman_brand_sales,exp_apply_allot,exp_apply_detail,exp_product_store_card_recharge
+        ,exp_product_store_card_consume,exp_project_store_card_recharge,exp_project_store_card_consume
+        ,exp_project_store_card_freeze,exp_project_store_card_unfreeze,exp_user,exp_stock_no_retail
+        ,exp_receipt_no_retail,exp_supplier_detail,exp_wholesale_store,exp_sum_user_order_day
+        ,exp_sum_user_order_hour,exp_sum_user_order_month,exp_month_retail_comparison,exp_per_sale_day
+        ,exp_wholesale_profit,exp_per_sale_month,exp_user_baby_birthday,exp_sum_retail_goods_day
+   	    ,exp_sum_retail_goods_month,exp_sum_retail_goods_class
+    </company_export_tag>
+
+    <join_in_export_tag>
+    exp_erp_check_miss ,exp_erp_check_diff,exp_erp_check_detail,exp_receipt_detail
+        ,exp_return_detail,exp_stock_detail ,exp_hstock_detail,exp_allot_detail,exp_kpi_sales_detail
+        ,exp_supplier_sum,exp_goods_sales,exp_ent_gross_prof,exp_company_gross_prof,exp_day_gross_prof,exp_brand_gross_prof
+        ,exp_cls2_gross_prof,exp_cls3_gross_prof,exp_cls4_gross_prof
+        ,exp_cls2_give_prof,exp_cls3_give_prof,exp_cls4_give_prof,exp_brand_give_prof,exp_user_class_consume
+        ,exp_user_brand_consume,erp_wholesaled_order_detail,,exp_user_amount_recharge
+        ,exp_user_amount_consume,exp_salesman_class_sales,exp_salesman_brand_sales,exp_product_store_card_recharge
+        ,exp_product_store_card_consume,exp_project_store_card_recharge,exp_project_store_card_consume
+        ,exp_project_store_card_freeze,exp_project_store_card_unfreeze,exp_sum_user_order_day,exp_sum_user_order_hour
+        ,exp_sum_user_order_month,exp_salesman_store_sales
+        <!--,exp_apply_detail_out,exp_apply_detail_in-->
+    </join_in_export_tag>
+
+    <store_export_tag>
+        exp_erp_check_miss ,exp_erp_check_diff,exp_erp_check_detail,exp_receipt_detail
+        ,exp_return_detail,exp_stock_detail ,exp_hstock_detail,exp_allot_detail,exp_kpi_sales_detail
+        ,exp_supplier_sum,erp_wholesaled_order_detail,exp_user_amount_recharge
+        ,exp_user_amount_consume,exp_product_store_card_recharge,exp_product_store_card_consume
+        ,exp_project_store_card_recharge,exp_project_store_card_consume,exp_project_store_card_freeze
+        ,exp_project_store_card_unfreeze,exp_sum_retail_goods_day,exp_sum_retail_goods_month
+        ,exp_sum_retail_goods_class
+      <!--  ,exp_apply_detail_out,exp_apply_detail_in-->
+    </store_export_tag>
+        <!-- 导出文件过期天数，导出文件在OSS的保留时间 -->
+    <expire_days>15</expire_days>
+    <!-- 单工作表最大的行数，最大允许1048576行 -->
+    <max_row_in_sheet>500000</max_row_in_sheet>
+
+    <!-- 是否保留本地文件  true/false -->
+    <keep_import_temp_file>true</keep_import_temp_file>
+    <keep_export_temp_file>true</keep_export_temp_file>
+
+</config>

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions xmlns="http://www.omg.org/spec/BPMN/20100524/MODEL" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:activiti="http://activiti.org/bpmn" xmlns:bpmndi="http://www.omg.org/spec/BPMN/20100524/DI" xmlns:omgdc="http://www.omg.org/spec/DD/20100524/DC" xmlns:omgdi="http://www.omg.org/spec/DD/20100524/DI" typeLanguage="http://www.w3.org/2001/XMLSchema" expressionLanguage="http://www.w3.org/1999/XPath" targetNamespace="http://www.activiti.org/processdef">
+  <process id="test11" name="test11" isExecutable="true">
+    <startEvent id="startEvent1"></startEvent>
+    <userTask id="sid-349CF683-12ED-477E-A6F9-4FD508F7D503" name="第一个" activiti:assignee="zmn">
+      <extensionElements>
+        <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="sid-B5B39DBA-973E-4976-9368-72A167245363" sourceRef="startEvent1" targetRef="sid-349CF683-12ED-477E-A6F9-4FD508F7D503"></sequenceFlow>
+    <userTask id="sid-A8943634-9B39-426B-8E03-F707BD7D62DA" name="第二个" activiti:assignee="zmn" activiti:candidateGroups="manager">
+      <extensionElements>
+        <modeler:initiator-can-complete xmlns:modeler="http://activiti.com/modeler"><![CDATA[false]]></modeler:initiator-can-complete>
+      </extensionElements>
+    </userTask>
+    <sequenceFlow id="sid-21AAA132-A11B-4FFC-AAD8-9E1C5150EF42" sourceRef="sid-349CF683-12ED-477E-A6F9-4FD508F7D503" targetRef="sid-A8943634-9B39-426B-8E03-F707BD7D62DA"></sequenceFlow>
+    <endEvent id="sid-E53FBF14-731D-4E32-9EF2-6C39B430B5D2"></endEvent>
+    <sequenceFlow id="sid-4D6ED614-32AF-4C94-9812-29571F6EBA04" sourceRef="sid-A8943634-9B39-426B-8E03-F707BD7D62DA" targetRef="sid-E53FBF14-731D-4E32-9EF2-6C39B430B5D2"></sequenceFlow>
+  </process>
+  <bpmndi:BPMNDiagram id="BPMNDiagram_test11">
+    <bpmndi:BPMNPlane bpmnElement="test11" id="BPMNPlane_test11">
+      <bpmndi:BPMNShape bpmnElement="startEvent1" id="BPMNShape_startEvent1">
+        <omgdc:Bounds height="30.0" width="30.0" x="100.0" y="163.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-349CF683-12ED-477E-A6F9-4FD508F7D503" id="BPMNShape_sid-349CF683-12ED-477E-A6F9-4FD508F7D503">
+        <omgdc:Bounds height="80.0" width="100.0" x="175.0" y="138.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-A8943634-9B39-426B-8E03-F707BD7D62DA" id="BPMNShape_sid-A8943634-9B39-426B-8E03-F707BD7D62DA">
+        <omgdc:Bounds height="80.0" width="100.0" x="320.0" y="138.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNShape bpmnElement="sid-E53FBF14-731D-4E32-9EF2-6C39B430B5D2" id="BPMNShape_sid-E53FBF14-731D-4E32-9EF2-6C39B430B5D2">
+        <omgdc:Bounds height="28.0" width="28.0" x="465.0" y="164.0"></omgdc:Bounds>
+      </bpmndi:BPMNShape>
+      <bpmndi:BPMNEdge bpmnElement="sid-21AAA132-A11B-4FFC-AAD8-9E1C5150EF42" id="BPMNEdge_sid-21AAA132-A11B-4FFC-AAD8-9E1C5150EF42">
+        <omgdi:waypoint x="275.0" y="178.0"></omgdi:waypoint>
+        <omgdi:waypoint x="320.0" y="178.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-B5B39DBA-973E-4976-9368-72A167245363" id="BPMNEdge_sid-B5B39DBA-973E-4976-9368-72A167245363">
+        <omgdi:waypoint x="130.0" y="178.0"></omgdi:waypoint>
+        <omgdi:waypoint x="175.0" y="178.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="sid-4D6ED614-32AF-4C94-9812-29571F6EBA04" id="BPMNEdge_sid-4D6ED614-32AF-4C94-9812-29571F6EBA04">
+        <omgdi:waypoint x="420.0" y="178.0"></omgdi:waypoint>
+        <omgdi:waypoint x="465.0" y="178.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+    </bpmndi:BPMNPlane>
+  </bpmndi:BPMNDiagram>
+</definitions>

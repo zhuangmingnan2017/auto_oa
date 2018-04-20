@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:aop="http://www.springframework.org/schema/aop"
+	    xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="
+			http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.0.xsd
+			http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+			http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.0.xsd"
+	default-lazy-init="true">
+	
+
+	<!-- 统一 事务管理 -->
+	<bean id="transactionManager" class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+           <property name="dataSource" ref="masterDataSource"/>
+    </bean>
+
+    <tx:advice id="o2oTxAdvice">
+        <!-- the transactional semantics... -->
+        <tx:attributes>
+            <!-- some methods are read-only -->
+            <tx:method name="get*" read-only="true"/>
+            <tx:method name="load*" read-only="true"/>
+            <tx:method name="list*" read-only="true"/>
+            <tx:method name="check*" read-only="true"/>
+            <!-- other methods use the default transaction settings (see below) -->
+            <tx:method name="*"/>
+        </tx:attributes>
+    </tx:advice>
+    <!-- ensure that the above transactional advice runs for any execution  -->
+    <aop:config>
+        <aop:pointcut id="o2oServiceOperation"
+                      expression="execution(* com.yinian.autooa.service..*(..))"/>
+        <aop:advisor advice-ref="o2oTxAdvice" pointcut-ref="o2oServiceOperation" order="1"/>
+    </aop:config>
+	<!-- 配置jdbc 模板 -->
+	<bean id="jdbcTemplate"  class = "org.springframework.jdbc.core.JdbcTemplate">
+		<property name="dataSource" ref="masterDataSource" />
+	</bean>
+	<!-- end -->
+	
+	<!-- dataSourceBean 通用属性父类 -->
+	<bean name="dataSourceBeanParent" class="com.alibaba.druid.pool.DruidDataSource" init-method="init" destroy-method="close" abstract="true">
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="10" />
+		<property name="minIdle" value="10" />
+		<property name="maxActive" value="200" />
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="60000" />
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+		<property name="validationQuery" value="SELECT 1" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="true" />
+		<property name="testOnReturn" value="true" />
+		<!--防止gts事务提交报错：事务过期-->
+		<property name="poolPreparedStatements" value="false" />
+		<!-- <property name="maxPoolPreparedStatementPerConnectionSize" value="20" /> -->
+		<!-- 配置监控统计拦截的filters -->
+		<property name="filters" value="stat" />
+	</bean>
+
+	<!-- autooa 主数据库 -->
+	<bean id="masterDataSource" parent="dataSourceBeanParent">
+		<!-- 基本属性 url、user、password -->
+		<property name="url" value="${jdbc.autooa.url}" />
+		<property name="username" value="${jdbc.autooa.user}" />
+		<property name="password" value="${jdbc.autooa.passwd}" />
+	</bean>
+</beans>
