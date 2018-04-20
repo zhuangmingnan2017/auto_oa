@@ -2,19 +2,16 @@ package com.yinian.autooa.controller.activiti;
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.serializer.SimplePropertyPreFilter;
-import com.yinian.autooa.common.ApiResponse;
-import com.yinian.autooa.common.XMsg;
-import com.yinian.autooa.constant.MessConst;
 import com.yinian.autooa.controller.BaseController;
 import org.activiti.engine.FormService;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.form.StartFormData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
-
-import java.util.List;
 
 /**
  * created by yinian on 18-4-5.
@@ -25,9 +22,6 @@ public class FormController extends BaseController {
 
     @Autowired
     private FormService formService;
-
-    @Autowired
-    private FormMapper formMapper;
 
     @Autowired
     private RepositoryService repositoryService;
@@ -44,15 +38,15 @@ public class FormController extends BaseController {
     }
 
 
-    @PostMapping("add.do")
+    /*@PostMapping("add.do")
     public ModelAndView uploadForm(Form form){
 
         formMapper.insertSelective(form);
 
         return new ModelAndView("redirect:list.do");
-    }
+    }*/
 
-    @GetMapping("list.do")
+   /* @GetMapping("list.do")
     public ModelAndView listForm(){
 
         ModelAndView modelAndView = new ModelAndView();
@@ -62,14 +56,14 @@ public class FormController extends BaseController {
         modelAndView.setViewName("/activiti/form/list_form");
 
         return modelAndView;
-    }
+    }*/
 
     @GetMapping("go_add_new_form.do")
     public ModelAndView goAddNewForm(){
         return new ModelAndView("/activiti/form/add_new_form");
     }
 
-    @PostMapping("del.do")
+   /* @PostMapping("del.do")
     @ResponseBody
     public ApiResponse delFormById(Integer formId){
 
@@ -81,9 +75,9 @@ public class FormController extends BaseController {
         else {
             return ApiResponse.getResponse(XMsg.FAIL);
         }
-    }
+    }*/
 
-    @PostMapping("edit.do")
+    /*@PostMapping("edit.do")
     public ModelAndView editFormByFormId(Integer formId){
         ModelAndView mv = new ModelAndView();
 
@@ -97,9 +91,9 @@ public class FormController extends BaseController {
         mv.addObject("form", form);
         mv.setViewName("/activiti/form/add_new_form");
         return mv;
-    }
+    }*/
 
-    @GetMapping("{definitionId}/startform.do")
+    /*@GetMapping("{definitionId}/startform.do")
     @ResponseBody
     public ApiResponse getStartFormByDefinitionId(@PathVariable("definitionId") String definitionId){
         String key = formService.getStartFormKey(definitionId);
@@ -117,5 +111,5 @@ public class FormController extends BaseController {
         }
 
         return ApiResponse.getDefaultResponse().setData(formList.get(0));
-    }
+    }*/
 }

@@ -22,7 +22,9 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletResponse;
-import java.io.*;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 import java.util.List;
 
 /**
@@ -37,8 +39,6 @@ public class ModelController extends AcBaseController {
     private RepositoryService repositoryService;
     @Autowired
     private RuntimeService runtimeService;
-    @Autowired
-    private CategoryService categoryService;
 
     @GetMapping("list.do")
     public ModelAndView listModel(){
@@ -46,7 +46,7 @@ public class ModelController extends AcBaseController {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("list", modelList);
-        modelAndView.addObject("category_list", categoryService.listAll());
+        //modelAndView.addObject("category_list", categoryService.listAll());
         modelAndView.setViewName("activiti/model/list_model");
 
         return modelAndView;
@@ -105,7 +105,7 @@ public class ModelController extends AcBaseController {
 
         ModelAndView modelAndView = new ModelAndView();
         modelAndView.addObject("list", deploymentList);
-        modelAndView.addObject("category_list", categoryService.listAll());
+        //modelAndView.addObject("category_list", categoryService.listAll());
         modelAndView.setViewName("activiti/model/list_deployment");
 
         return modelAndView;

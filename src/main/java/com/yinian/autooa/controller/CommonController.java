@@ -10,6 +10,7 @@ import org.apache.shiro.subject.Subject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -20,7 +21,6 @@ import javax.servlet.http.HttpSession;
  * created by yinian on 18-4-5.
  */
 @Controller
-@RequestMapping("oa/common/")
 public class CommonController {
 
     @GetMapping("login.do")
@@ -42,8 +42,9 @@ public class CommonController {
             mv.setViewName("login");
             return mv;
         }
-        return mv;
 
+        mv.setViewName("index");
+        return mv;
     }
 
     @GetMapping({"index","/","jump_to_login"})
@@ -74,5 +75,10 @@ public class CommonController {
         session.removeAttribute(SessionConst.USER_ID.name());
 
         return new ModelAndView("redirect:login");
+    }
+
+    @GetMapping("/{errorCode}")
+    public  ModelAndView errorPage(@PathVariable("errorCode") String errorCode){
+        return new ModelAndView("error/"+errorCode);
     }
 }

@@ -1,6 +1,9 @@
 package com.yinian.autooa.common;
 
 import com.yinian.autooa.constant.MessConst;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authz.UnauthenticatedException;
+import org.apache.shiro.authz.UnauthorizedException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -15,6 +18,13 @@ import org.springframework.web.servlet.ModelAndView;
 public class SpringExceptionHandler {
 
     private static final Logger logger = LoggerFactory.getLogger(SpringExceptionHandler.class);
+
+    @ExceptionHandler(value = {UnauthorizedException.class, UnauthenticatedException.class, AuthenticationException.class})
+    public ModelAndView unauthorizedException(final Exception ex, final WebRequest req) {
+        return new ModelAndView("error/403")
+                .addObject(MessConst.ERR_MSG.name(), ex.getMessage());
+    }
+
     /**
      * 全局处理Exception
      * 错误的情况下返回500
