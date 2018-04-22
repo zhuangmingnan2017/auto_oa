@@ -8,5 +8,10 @@ import java.util.List;
  */
 public interface SysPermissionService {
 
-    List<String> getPermisssionStrListByUserAccount(String account);
+    /**
+     * 根据用户帐号获取用户权限
+     * @param account
+     * @return
+     */
+    List<String> getPermissionStrListByUserAccount(String account);
 }

@@ -9,5 +9,17 @@ import java.util.Set;
  */
 public interface SysRoleService {
 
-    Set<String> getRoleStrSetByUserAccount(String account);
+    /**
+     * 根据帐号获取用户的角色集合
+     * @param account
+     * @return
+     */
+    Set<String> getRoleCodeSetByUserAccount(String account);
+
+    /**
+     * 根据帐号获取用户的角色id列表
+     * @param account
+     * @return
+     */
+    List<Integer> getRoleIdListByUserAccount(String account);
 }

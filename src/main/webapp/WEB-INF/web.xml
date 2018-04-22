@@ -57,12 +57,7 @@
 
 	<servlet-mapping>
 		 <servlet-name>autooa</servlet-name>
-		 <url-pattern>*.do</url-pattern>
-	</servlet-mapping>
-
-	<servlet-mapping>
-		<servlet-name>autooa</servlet-name>
-		<url-pattern>/</url-pattern>
+		 <url-pattern>/</url-pattern>
 	</servlet-mapping>
 
 	<!-- swagger ui 的静态资源处理-->

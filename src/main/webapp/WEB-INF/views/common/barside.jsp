@@ -1,8 +1,30 @@
+<%@ page import="org.apache.shiro.SecurityUtils" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <c:set var="projectPath" value="${pageContext.request.contextPath}" />
 
+<style>
+    .choice_menu{
+        color:lightskyblue;
+        background-color: lime;
+    }
+    .not_choice_menu{
+        color: black;
+    }
+    .mask {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 100%;
+        width: 100%;
+        background: black;
+        z-index: 2000;
+    }
+</style>
+
+<div id="maskDiv"></div>
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container-fluid">
         <div class="navbar-header">
@@ -31,7 +53,7 @@
                     </c:choose>
                 </a>
                 </li>
-                <li><a href="${pageContext.request.contextPath}/logout.do">退出登录</a></li>
+                <li><a href="${pageContext.request.contextPath}/logout">退出登录</a></li>
             </ul>
             <form class="navbar-form navbar-right">
                 <input type="text" class="form-control" placeholder="Search...">
@@ -42,17 +64,119 @@
 
 <div class="container-fluid" style="margin-top:60px;">
     <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar">
-            <ul class="nav nav-pills nav-stacked">
-                <li <c:if test="${pageName == 'list_model'}"> class="active"</c:if>><a href="${projectPath}/ac/model/list.do">部署模型管理<span class="sr-only">(current)</span></a></li>
-                <li <c:if test="${pageName == 'list_definition'}"> class="active"</c:if>><a href="${projectPath}/ac/definition/list.do">流程定义管理</a></li>
-                <li <c:if test="${pageName == 'list_instance'}"> class="active"</c:if>><a href="${projectPath}/process/instance/list.do">运行中的流程</a></li>
-                <li <c:if test="${pageName == 'list_invoke_process'}"> class="active"</c:if>><a href="${projectPath}/ac/definition/go_list_invoke_process.do">发起流程</a></li>
-                <li <c:if test="${pageName == 'list_instance'}"> class="active"</c:if>><a href="${projectPath}/process/instance/list.do?userId=${sessionScope.ACCOUNT}">待办任务</a></li>
-                <li <c:if test="${pageName == 'list_form'}"> class="active"</c:if>><a href="${projectPath}/ac/form/list.do">表单管理</a></li>
-            ------------------------------<br />
-                <li><a href="">用户管理</a></li>
-                <li><a href="">部门管理</a></li>
-            </ul>
+        <div class="col-sm-3 col-md-2 sidebar" id="sidebarDiv">
+            <dl class="menu1">
+                <dt>人事管理</dt>
+                <dd class="first_dd"><a href="#">部门管理</a></dd>
+                <dd><a href="#">员工管理</a></dd>
+                <dd><a href="#">通讯录管理</a></dd>
+            </dl>
+            <dl class="menu2">
+                <dt>日程管理</dt>
+                <dd class="first_dd"><a href="#">部门日程</a></dd>
+                <dd><a href="#">我的日程</a></dd>
+                <dd><a href="#">我的便签</a></dd>
+            </dl>
+            <dl class="menu3">
+                <dt>文件管理</dt>
+                <dd class="first_dd"><a href="#">文件管理</a></dd>
+                <dd><a href="#">回收站</a></dd>
+            </dl>
+            <dl class="menu3">
+                <dt>消息管理</dt>
+                <dd class="first_dd"><a href="#">短信管理</a></dd>
+                <dd><a href="#">邮件管理</a></dd>
+                <dd><a href="#">论坛</a></dd>
+            </dl>
+            <dl class="menu3">
+                <dt>工作流管理</dt>
+                <dd class="first_dd"><a href="#">流程管理</a></dd>
+                <dd><a href="#">表单管理</a></dd>
+                <dd><a href="#">运行中的流程</a></dd>
+                <dd><a href="#">我的流程</a></dd>
+            </dl>
+            <dl class="menu3">
+                <dt>系统管理</dt>
+                <dd class="first_dd"><a href="#">角色管理</a></dd>
+                <dd><a href="#">登录日志</a></dd>
+                <dd><a href="#">操作日志</a></dd>
+                <dd><a href="#">设置</a></dd>
+            </dl>
         </div>
 <div class="col-sm-9 col-md-10  main">
+<script type="text/javascript">
+    $(function () {
+        // 先获取菜单，再执行隐藏操作
+        listMenu();
+
+    });
+
+    /* 获取菜单 */
+    function listMenu(){
+        /*获取当前的登录名*/
+        var account = "<%=SecurityUtils.getSubject().getPrincipal()%>";
+
+        console.log("当前登录账户名：" + account);
+        var loginUrl = "${pageContext.request.contextPath}/login.html";
+        if(account == null || account === '' || account === 'null'){
+            console.log(loginUrl);
+            $("maskDiv").addClass("mask");
+            swal({
+                title: "请登录后操作",
+                text: "3秒后为您跳转登录页面,您可以点击<a href="+loginUrl+" style='cursor:pointer'>这里</a>进行跳转...",
+                html: true
+            });
+
+            setTimeout(function () {
+                window.location.replace(loginUrl);
+            }, 5000);
+        }
+
+        $.get("${pageContext.request.contextPath}/oa/system/menu/allmenu/list.do?account="+account, function (data) {
+            $("#sidebarDiv").html("");  // 清空内容
+            /* 第一遍遍历，添加一级菜单 */
+            $.each(data.data, function (n, value) {
+                if(value.parent_id !== 0){
+                    return ;
+                }
+
+                var newDl = $("<dl id='sidebar_dl_"+value.id+"' style='cursor:pointer;' onclick='javaScript:sidebarMenuClick();'><dt>"+value.name+"</dt></dl>");
+                $("#sidebarDiv").append(newDl);
+            });
+
+            /* 第二遍遍历，添加到二级菜单 */
+            $.each(data.data, function (n, value) {
+                if(value.parent_id === 0){
+                   return ;
+                }
+
+                var newDd = $("<dd style='display:none;'><a href='"+value.url+"'>"+value.name+"</a></dd>");
+                $("#sidebar_dl_"+value.parent_id).append(newDd);
+                //console.log(value);
+            });
+        });
+    }
+
+    /*  菜单点击显示/收缩js */
+    function sidebarMenuClick() {
+        if($(this).parent("dl").find("dd").hasClass("choice_menu")){
+            var chooseDd = $(this).parent("dl").find("dd");
+            chooseDd.removeClass("choice_menu");
+            chooseDd.addClass("not_choice_menu");
+            chooseDd.hide(1000);
+            return ;
+        }
+
+        var allSidebarDd = $("div.sidebar dd");
+        allSidebarDd.toggle(500);
+        allSidebarDd.removeClass("choice_menu");
+        allSidebarDd.addClass("not_choice_menu");
+        console.log('2');
+
+        var chooseDd = $(this).parent("dl").find("dd");
+        chooseDd.addClass("choice_menu");
+        chooseDd.removeClass("not_choice_menu");
+        chooseDd.toggle(1000);
+    };
+
+</script>

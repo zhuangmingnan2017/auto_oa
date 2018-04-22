@@ -7,17 +7,19 @@
         AUTO-OA
     </title>
 
-    <link href="https://cdn.bootcss.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdn.bootcss.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/static/css/bootstrap/3.3.7/bootstrap.min.css" rel="stylesheet" />
+    <link href="${pageContext.request.contextPath}/static/css/font-awesome/4.7.0/font-awesome.min.css" rel="stylesheet" />
+    <link href="${pageContext.request.contextPath}/static/css/sweetalter-1.1.3/sweetalter.css" rel="stylesheet" />
 
-    <script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js" ></script>
-    <script src="https://cdn.bootcss.com/bootstrap/4.0.0/js/bootstrap.min.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/extend/jquery/3.3.1/jquery.js" ></script>
+    <script src="${pageContext.request.contextPath}/static/js/extend/bootstrap/4.0.0/bootstrap.js"></script>
+    <script src="${pageContext.request.contextPath}/static/js/extend/bootstrap-show-password/1.1.2/bootstrap-show-password.js"></script>
 
     <!--jquery.validate-->
     <script src="https://cdn.bootcss.com/jquery-validate/1.17.0/jquery.validate.min.js"></script>
     <%--<script type="text/javascript" src="js/message.js" ></script>--%>
 
-    <link href="/static/css/login.css" rel="stylesheet">
+    <link href="${pageContext.request.contextPath}/static/css/login.css" rel="stylesheet">
 
 </head>
 <body style="background-image:url('/static/image/login_oa_bg.jpeg')">
