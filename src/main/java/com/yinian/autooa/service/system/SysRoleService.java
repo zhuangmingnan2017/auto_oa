@@ -1,4 +1,7 @@
-package com.yinian.autooa.service;
+package com.yinian.autooa.service.system;
+
+import com.yinian.autooa.model.SysRole;
+import com.yinian.autooa.vo.input.system.SetUserRoleInputVO;
 
 import java.util.List;
 import java.util.Set;
@@ -22,4 +25,16 @@ public interface SysRoleService {
      * @return
      */
     List<Integer> getRoleIdListByUserAccount(String account);
+
+    List<SysRole> listAll();
+
+    void updateSelectiveById(SysRole role, Integer id);
+
+    void addNew(SysRole role);
+
+    void delById(Integer id);
+
+    List<SysRole> listUserRoleByUserId(Integer userId);
+
+    void setUserRole(SetUserRoleInputVO vo);
 }

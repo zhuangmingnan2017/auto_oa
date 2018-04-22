@@ -3,7 +3,7 @@ package com.yinian.autooa.service.impl.system;
 import com.yinian.autooa.dao.autocode.SysMenuMapper;
 import com.yinian.autooa.model.SysMenu;
 import com.yinian.autooa.model.SysMenuExample;
-import com.yinian.autooa.service.SysPermissionService;
+import com.yinian.autooa.service.system.SysPermissionService;
 import com.yinian.autooa.service.system.SysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;

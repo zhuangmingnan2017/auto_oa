@@ -25,7 +25,7 @@ public class SysMenuController extends BaseController {
         ModelAndView mv = new ModelAndView();
 
         mv.addObject("menuList", sysMenuService.listAllParentSysMenu());
-        mv.setViewName("system/list_permission");
+        mv.setViewName("system/list_menu");
         return mv;
     }
 

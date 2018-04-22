@@ -9,7 +9,7 @@
 <html>
 
 <head>
-    <title>用户管理-基于工作流的办公自动化系统</title>
+    <title>基于工作流的办公自动化系统</title>
     <%@ include  file="../common/header.jsp"%>
 
     <style>
@@ -34,7 +34,7 @@
 <%--菜单栏--%>
 <div class="row">
     <ul style="text-decoration: none;">
-        <li><button class="btn btn-primary" onclick="javascript:$('#addPermissionModal').show(1000);">添加权限配置</button></li>
+        <li><button class="btn btn-primary" onclick="javascript:$('#addPermissionModal').show(1000);">新增权限</button></li>
     </ul>
 </div>
 <%--权限列表--%>
@@ -43,22 +43,28 @@
         <thead>
             <tr>
                 <th>序号</th>
-                <th>登录账户</th>
-                <th>用户名</th>
+                <th>菜单名称</th>
+                <th>url地址</th>
+                <th>权限编码</th>
+                <th>描述</th>
+                <th>id</th>
+                <th>parent_id</th>
                 <th>操作</th>
             </tr>
         </thead>
         <tbody>
-        <c:forEach items="${permissionList}" var="item" varStatus="status">
-            <tr style="cursor: pointer" id="user_tr_${item.id}"}>
-                <input type="hidden" name="id" value="${item.id}"/>
-                <td>${status.index+1}</td>
-                <td>${item.permission_code}</td>
-                <td>${item.permission_name}</td>
-                <td>
-                    <button class="btn btn-primary btn-sm">关联菜单</button>
-                    <button class="btn btn-primary btn-sm">编辑权限信息</button>
-                    <button class="btn btn-danger btn-sm">删除权限信息</button>
+        <c:forEach items="${menuList}" var="item" varStatus="status">
+            <tr onclick="showSubMenu(${item.id}, this);" style="cursor: pointer" id="menu_tr_${item.id}"}>
+                <td width="5%">${status.index+1}</td>
+                <td width="10%">${item.name}</td>
+                <td width="20%">${item.url}</td>
+                <td width="20%">${item.permission}</td>
+                <td width="20%">${item.description}</td>
+                <td width="5%">${item.id}</td>
+                <td width="5%">${item.parent_id}</td>
+                <td width="15%">
+                    <button class="btn btn-primary btn-small" onclick="updateMenu('menu_tr_${item.id}');">编辑菜单</button>
+                    <button class="btn btn-danger btn-small" onclick="delMenu(${item.id}, ${item.parent_id});">删除菜单</button>
                 </td>
             </tr>
         </c:forEach>
@@ -279,12 +285,18 @@
                 closeOnConfirm: false
             },
             function(){
-                swal("删除！", "你的虚拟文件已经被删除。", "success");
+
+                $.post(url, {}, function (data) {
+                    if(data.code === 0){
+                        swal("删除！", "用户删除成功。", "success");
+                        setTimeout(function () {
+                            window.location.reload();
+                        },2000);
+                        return ;
+                    }
+                    swal("删除！", data.message, "error");
+                })
             });
-
-        /*$.post(url, {}, function (data) {
-
-        })*/
     }
 </script>
 

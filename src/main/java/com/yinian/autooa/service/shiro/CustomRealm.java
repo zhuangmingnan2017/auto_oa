@@ -1,9 +1,9 @@
 package com.yinian.autooa.service.shiro;
 
 import com.yinian.autooa.model.SysUser;
-import com.yinian.autooa.service.SysPermissionService;
-import com.yinian.autooa.service.SysRoleService;
-import com.yinian.autooa.service.SysUserService;
+import com.yinian.autooa.service.system.SysPermissionService;
+import com.yinian.autooa.service.system.SysRoleService;
+import com.yinian.autooa.service.system.SysUserService;
 import com.yinian.autooa.util.MD5Util;
 import jodd.util.StringUtil;
 import org.apache.shiro.authc.*;

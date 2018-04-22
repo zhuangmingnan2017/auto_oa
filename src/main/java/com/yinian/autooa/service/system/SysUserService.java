@@ -1,4 +1,4 @@
-package com.yinian.autooa.service;
+package com.yinian.autooa.service.system;
 
 import com.yinian.autooa.model.SysUser;
 

@@ -120,7 +120,6 @@
         var loginUrl = "${pageContext.request.contextPath}/login.html";
         if(account == null || account === '' || account === 'null'){
             console.log(loginUrl);
-            $("maskDiv").addClass("mask");
             swal({
                 title: "请登录后操作",
                 text: "3秒后为您跳转登录页面,您可以点击<a href="+loginUrl+" style='cursor:pointer'>这里</a>进行跳转...",
@@ -130,6 +129,7 @@
             setTimeout(function () {
                 window.location.replace(loginUrl);
             }, 5000);
+            return ;
         }
 
         $.get("${pageContext.request.contextPath}/oa/system/menu/allmenu/list.do?account="+account, function (data) {

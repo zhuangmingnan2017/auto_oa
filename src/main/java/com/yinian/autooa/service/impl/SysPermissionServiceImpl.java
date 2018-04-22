@@ -7,14 +7,17 @@ import com.yinian.autooa.model.SysPermission;
 import com.yinian.autooa.model.SysPermissionExample;
 import com.yinian.autooa.model.SysRolePermission;
 import com.yinian.autooa.model.SysRolePermissionExample;
-import com.yinian.autooa.service.SysPermissionService;
-import com.yinian.autooa.service.SysRoleService;
+import com.yinian.autooa.service.system.SysPermissionService;
+import com.yinian.autooa.service.system.SysRoleService;
+import com.yinian.autooa.vo.input.system.SetRolePermissionInputVO;
+import jodd.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -81,5 +84,77 @@ public class SysPermissionServiceImpl implements SysPermissionService {
             permissionCodeList.add(permission.getPermission_code());
         }
         return permissionCodeList;
+    }
+
+    @Override
+    public void updateSelectiveById(SysPermission permission, Integer id) {
+        sysPermissionMapper.updateByPrimaryKeySelective(permission);
+    }
+
+    @Override
+    public void addNew(SysPermission permission) {
+        permission.setId(null);
+        sysPermissionMapper.insertSelective(permission);
+    }
+
+    @Override
+    public void delById(Integer id) {
+        sysPermissionMapper.deleteByPrimaryKey(id);
+    }
+
+    @Override
+    public List<SysPermission> listAll() {
+        return sysPermissionMapper.selectByExample(new SysPermissionExample());
+    }
+
+    @Override
+    public void setRolePermission(SetRolePermissionInputVO vo) {
+        Integer roleId = vo.getRoleId();
+
+        // 先删除，再重新插入
+        SysRolePermissionExample rolePermissionExample = new SysRolePermissionExample();
+        rolePermissionExample.createCriteria().andRole_idEqualTo(roleId);
+        sysRolePermissionMapper.deleteByExample(rolePermissionExample);
+
+        // 如果是清空了角色配置就直接返回
+        if(StringUtil.isBlank(vo.getPermissionIdListStr())){
+            return ;
+        }
+
+        List<String> permissionIdStrList = Arrays.asList(vo.getPermissionIdListStr().split(","));
+        List<SysRolePermission> rolePermissionList = new ArrayList<SysRolePermission>(permissionIdStrList.size());
+        SysRolePermission rolePermission = null;
+        for(String permissionIdStr : permissionIdStrList) {
+            rolePermission = new SysRolePermission();
+            rolePermission.setRole_id(roleId);
+            rolePermission.setPermission_id(Integer.valueOf(permissionIdStr));
+
+            rolePermissionList.add(rolePermission);
+        }
+
+        sysRolePermissionMapper.insertBatchSelective(rolePermissionList);
+    }
+
+    @Override
+    public List<SysPermission> listRolePermissionByRoleId(Integer roleId) {
+        SysRolePermissionExample rolePermissionExample = new SysRolePermissionExample();
+        rolePermissionExample.createCriteria().andRole_idEqualTo(roleId);
+        List<SysRolePermission> rolePermissionList = sysRolePermissionMapper.selectByExample(rolePermissionExample);
+        if(rolePermissionList.isEmpty()){
+            return null;
+        }
+
+        List<Integer> permissionIdList = new ArrayList<Integer>(rolePermissionList.size());
+        for(SysRolePermission rolePermission : rolePermissionList){
+            if(permissionIdList.contains(rolePermission.getPermission_id())){
+                continue;
+            }
+
+            permissionIdList.add(rolePermission.getPermission_id());
+        }
+
+        SysPermissionExample permissionExample = new SysPermissionExample();
+        permissionExample.createCriteria().andIdIn(permissionIdList);
+        return sysPermissionMapper.selectByExample(permissionExample);
     }
 }

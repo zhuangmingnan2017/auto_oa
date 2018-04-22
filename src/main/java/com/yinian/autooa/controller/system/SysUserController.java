@@ -3,7 +3,7 @@ package com.yinian.autooa.controller.system;
 import com.yinian.autooa.common.ApiResponse;
 import com.yinian.autooa.controller.BaseController;
 import com.yinian.autooa.model.SysUser;
-import com.yinian.autooa.service.SysUserService;
+import com.yinian.autooa.service.system.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -34,9 +34,12 @@ public class SysUserController extends BaseController {
     public ApiResponse addOrUpdate(@RequestBody SysUser user){
         // 有id，则编辑
         if(user.getId() != null && user.getId() > 0){
+            user.setPassword(null);
+            user.setAccount(null);
             sysUserService.updateSelectiveUserById(user, user.getId());
         }else{
             // 没有id，则新增
+            user.setId(null);
             sysUserService.addNewUser(user);
         }
         return ApiResponse.getDefaultResponse();

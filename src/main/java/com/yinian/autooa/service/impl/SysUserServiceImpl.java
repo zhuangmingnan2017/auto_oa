@@ -3,7 +3,8 @@ package com.yinian.autooa.service.impl;
 import com.yinian.autooa.dao.autocode.SysUserMapper;
 import com.yinian.autooa.model.SysUser;
 import com.yinian.autooa.model.SysUserExample;
-import com.yinian.autooa.service.SysUserService;
+import com.yinian.autooa.service.system.SysUserService;
+import com.yinian.autooa.util.MD5Util;
 import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -75,6 +76,7 @@ public class SysUserServiceImpl implements SysUserService {
      */
     @Override
     public void addNewUser(SysUser user) {
+        user.setPassword(MD5Util.getMD5UpperCase(user.getPassword()));
         sysUserMapper.insertSelective(user);
     }
 
