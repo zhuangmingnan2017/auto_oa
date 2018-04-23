@@ -50,6 +50,12 @@ public class SysUser {
     private String address;
 
     /**
+     * 部门id
+     * 表字段 : sys_user.depart_id
+     */
+    private Integer depart_id;
+
+    /**
      * 获取 id 字段:sys_user.id
      *
      * @return sys_user.id, id
@@ -191,5 +197,23 @@ public class SysUser {
      */
     public void setAddress(String address) {
         this.address = address == null ? null : address.trim();
+    }
+
+    /**
+     * 获取 部门id 字段:sys_user.depart_id
+     *
+     * @return sys_user.depart_id, 部门id
+     */
+    public Integer getDepart_id() {
+        return depart_id;
+    }
+
+    /**
+     * 设置 部门id 字段:sys_user.depart_id
+     *
+     * @param depart_id the value for sys_user.depart_id, 部门id
+     */
+    public void setDepart_id(Integer depart_id) {
+        this.depart_id = depart_id;
     }
 }

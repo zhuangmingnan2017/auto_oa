@@ -1,4 +1,4 @@
-package com.yinian.autooa.service.impl;
+package com.yinian.autooa.service.impl.system;
 
 import com.yinian.autooa.dao.autocode.SysUserMapper;
 import com.yinian.autooa.model.SysUser;

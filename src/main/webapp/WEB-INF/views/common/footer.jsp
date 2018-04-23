@@ -29,4 +29,38 @@
         });
         return o;
     }
+
+    $.jsonPost = function(url, data, callBack){
+        $.post({
+            url:url,
+            data:data,
+            dataType:"json",
+            contentType:"application/json",
+            success:callBack
+        });
+    }
+
+    /**
+     * 时间戳转换日期
+     * @param <int> unixTime    待时间戳(秒)
+     * @param <bool> isFull    返回完整时间(Y-m-d 或者 Y-m-d H:i:s)
+     * @param <int>  timeZone   时区
+     */
+
+    function UnixToDate(unixTime, isFull, timeZone) {
+        if (typeof (timeZone) == 'number'){
+            unixTime = parseInt(unixTime) + parseInt(timeZone) * 60 * 60;
+        }
+        var time = new Date(unixTime);
+        var ymdhis = "";
+        ymdhis += time.getUTCFullYear() + "-";
+        ymdhis += (time.getUTCMonth()+1) + "-";
+        ymdhis += time.getUTCDate();
+        if (isFull === true){
+            ymdhis += " " + time.getUTCHours() + ":";
+            ymdhis += time.getUTCMinutes() + ":";
+            ymdhis += time.getUTCSeconds();
+        }
+        return ymdhis;
+    }
 </script>

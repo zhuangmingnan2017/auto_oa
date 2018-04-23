@@ -1,4 +1,4 @@
-package com.yinian.autooa.service.impl;
+package com.yinian.autooa.service.impl.system;
 
 import com.alibaba.fastjson.JSON;
 import com.yinian.autooa.dao.autocode.SysRoleMapper;

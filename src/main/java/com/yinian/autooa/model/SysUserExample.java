@@ -730,6 +730,66 @@ public class SysUserExample {
             addCriterion("address not between", value1, value2, "address");
             return (Criteria) this;
         }
+
+        public Criteria andDepart_idIsNull() {
+            addCriterion("depart_id is null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepart_idIsNotNull() {
+            addCriterion("depart_id is not null");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepart_idEqualTo(Integer value) {
+            addCriterion("depart_id =", value, "depart_id");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepart_idNotEqualTo(Integer value) {
+            addCriterion("depart_id <>", value, "depart_id");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepart_idGreaterThan(Integer value) {
+            addCriterion("depart_id >", value, "depart_id");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepart_idGreaterThanOrEqualTo(Integer value) {
+            addCriterion("depart_id >=", value, "depart_id");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepart_idLessThan(Integer value) {
+            addCriterion("depart_id <", value, "depart_id");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepart_idLessThanOrEqualTo(Integer value) {
+            addCriterion("depart_id <=", value, "depart_id");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepart_idIn(List<Integer> values) {
+            addCriterion("depart_id in", values, "depart_id");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepart_idNotIn(List<Integer> values) {
+            addCriterion("depart_id not in", values, "depart_id");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepart_idBetween(Integer value1, Integer value2) {
+            addCriterion("depart_id between", value1, value2, "depart_id");
+            return (Criteria) this;
+        }
+
+        public Criteria andDepart_idNotBetween(Integer value1, Integer value2) {
+            addCriterion("depart_id not between", value1, value2, "depart_id");
+            return (Criteria) this;
+        }
     }
 
     /**

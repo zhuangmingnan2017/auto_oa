@@ -26,6 +26,12 @@
             color:black;
             background-color: lightcyan;
         }
+        #menuTable button{
+            padding:5px 10px;
+            font-size:12px;
+            line-height:1.5;
+            border-radius:3px
+        }
     </style>
 </head>
 
@@ -34,7 +40,7 @@
 <%--菜单栏--%>
 <div class="row">
     <ul style="text-decoration: none;">
-        <li><button class="btn btn-primary" onclick="javascript:$('#addPermissionModal').show(1000);">新增权限</button></li>
+        <li><button class="btn btn-primary" onclick="javascript:$('#addPermissionModal').show(1000);">新增菜单</button></li>
     </ul>
 </div>
 <%--权限列表--%>
@@ -63,8 +69,8 @@
                 <td width="5%">${item.id}</td>
                 <td width="5%">${item.parent_id}</td>
                 <td width="15%">
-                    <button class="btn btn-primary btn-small" onclick="updateMenu('menu_tr_${item.id}');">编辑菜单</button>
-                    <button class="btn btn-danger btn-small" onclick="delMenu(${item.id}, ${item.parent_id});">删除菜单</button>
+                    <button class="btn btn-primary btn-sm" onclick="updateMenu('menu_tr_${item.id}');">编辑菜单</button>
+                    <button class="btn btn-danger btn-sm" onclick="delMenu(${item.id}, ${item.parent_id});">删除菜单</button>
                 </td>
             </tr>
         </c:forEach>

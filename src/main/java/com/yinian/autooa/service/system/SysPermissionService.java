@@ -30,4 +30,8 @@ public interface SysPermissionService {
     void setRolePermission(SetRolePermissionInputVO vo);
 
     List<SysPermission> listRolePermissionByRoleId(Integer roleId);
+
+    void delByPermissionCode(String permissionCode);
+
+    void updatePermissionCode(String oldPermissionCode, String newPermissionCode);
 }

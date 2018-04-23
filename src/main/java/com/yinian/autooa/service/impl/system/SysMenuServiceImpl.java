@@ -3,6 +3,8 @@ package com.yinian.autooa.service.impl.system;
 import com.yinian.autooa.dao.autocode.SysMenuMapper;
 import com.yinian.autooa.model.SysMenu;
 import com.yinian.autooa.model.SysMenuExample;
+import com.yinian.autooa.model.SysPermission;
+import com.yinian.autooa.model.SysPermissionExample;
 import com.yinian.autooa.service.system.SysPermissionService;
 import com.yinian.autooa.service.system.SysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -69,6 +71,12 @@ public class SysMenuServiceImpl implements SysMenuService {
     @Override
     public void addNewSysMenu(SysMenu menu) {
         sysMenuMapper.insertSelective(menu);
+
+        // 新增菜单的时候顺便配置权限
+        SysPermission permission = new SysPermission();
+        permission.setPermission_code(menu.getPermission());
+        permission.setPermission_name(menu.getName());
+        sysPermissionService.addNew(permission);
     }
 
     /**
@@ -78,6 +86,15 @@ public class SysMenuServiceImpl implements SysMenuService {
      */
     @Override
     public void delSysMenuByMenuId(Integer menuId) {
+        SysMenu menu = sysMenuMapper.selectByPrimaryKey(menuId);
+        if(menu == null){
+            return ;
+        }
+
+        // 删除菜单级联删除权限
+        String permissionCode = menu.getPermission();
+        sysPermissionService.delByPermissionCode(permissionCode);
+
         sysMenuMapper.deleteByPrimaryKey(menuId);
     }
 
@@ -89,7 +106,13 @@ public class SysMenuServiceImpl implements SysMenuService {
      */
     @Override
     public void updateSelectiveSysMenuById(SysMenu menu, Integer menuId) {
+        SysMenu oldMenu = sysMenuMapper.selectByPrimaryKey(menuId);
+
         sysMenuMapper.updateByPrimaryKeySelective(menu);
+
+        // 编辑菜单的时候顺便更新权限信息
+        sysPermissionService.updatePermissionCode(oldMenu.getPermission(), menu.getPermission());
+
     }
 
     /**

@@ -22,6 +22,10 @@
         background: black;
         z-index: 2000;
     }
+
+    .currMenu{
+        background-color: pink;
+    }
 </style>
 
 <div id="maskDiv"></div>
@@ -109,6 +113,10 @@
         // 先获取菜单，再执行隐藏操作
         listMenu();
 
+        // 当前菜单高亮
+        var currParentMenuId = chooseCurrMenu();
+
+        sidebarMenuClick(currParentMenuId);
     });
 
     /* 获取菜单 */
@@ -128,55 +136,73 @@
 
             setTimeout(function () {
                 window.location.replace(loginUrl);
-            }, 5000);
+            }, 3000);
             return ;
         }
 
-        $.get("${pageContext.request.contextPath}/oa/system/menu/allmenu/list.do?account="+account, function (data) {
-            $("#sidebarDiv").html("");  // 清空内容
-            /* 第一遍遍历，添加一级菜单 */
-            $.each(data.data, function (n, value) {
-                if(value.parent_id !== 0){
-                    return ;
-                }
+        $.ajax({
+            url : "${pageContext.request.contextPath}/oa/system/menu/allmenu/list.do?account="+account,
+            type : 'get',
+            async: false,       //使用同步的方式,true为异步方式
+            success : function(data){
+                $("#sidebarDiv").html("");  // 清空内容
+                /* 第一遍遍历，添加一级菜单 */
+                $.each(data.data, function (n, value) {
+                    if(value.parent_id !== 0){
+                        return ;
+                    }
 
-                var newDl = $("<dl id='sidebar_dl_"+value.id+"' style='cursor:pointer;' onclick='javaScript:sidebarMenuClick();'><dt>"+value.name+"</dt></dl>");
-                $("#sidebarDiv").append(newDl);
-            });
+                    var eleId = "sidebar_dl_"+value.id;
+                    var newDl = $("<dl id='"+eleId+"' style='cursor:pointer;' onclick='javascript:sidebarMenuClick(\""+eleId+"\");'><dt>"+value.name+"</dt></dl>");
+                    $("#sidebarDiv").append(newDl);
+                });
 
-            /* 第二遍遍历，添加到二级菜单 */
-            $.each(data.data, function (n, value) {
-                if(value.parent_id === 0){
-                   return ;
-                }
+                /* 第二遍遍历，添加到二级菜单 */
+                $.each(data.data, function (n, value) {
+                    if(value.parent_id === 0){
+                        return ;
+                    }
 
-                var newDd = $("<dd style='display:none;'><a href='"+value.url+"'>"+value.name+"</a></dd>");
-                $("#sidebar_dl_"+value.parent_id).append(newDd);
-                //console.log(value);
-            });
+                    var newDd = $("<dd style='display:none;'><a href='"+value.url+"'>"+value.name+"</a></dd>");
+                    $("#sidebar_dl_"+value.parent_id).append(newDd);
+                    //console.log(value);
+                });
+            },
+            fail:function(){
+            }
         });
+
     }
 
     /*  菜单点击显示/收缩js */
-    function sidebarMenuClick() {
-        if($(this).parent("dl").find("dd").hasClass("choice_menu")){
-            var chooseDd = $(this).parent("dl").find("dd");
-            chooseDd.removeClass("choice_menu");
-            chooseDd.addClass("not_choice_menu");
+    function sidebarMenuClick(parentMenuId) {
+        console.log(parentMenuId+"=====");
+        var chooseDd = $("dl[id='"+parentMenuId+"']").find("dd");
+        if(chooseDd.eq(0).css("display") === "block"){
             chooseDd.hide(1000);
             return ;
         }
 
-        var allSidebarDd = $("div.sidebar dd");
-        allSidebarDd.toggle(500);
-        allSidebarDd.removeClass("choice_menu");
-        allSidebarDd.addClass("not_choice_menu");
-        console.log('2');
+        var notChooseDd = $("dl[id!='"+parentMenuId+"']").find("dd");
+        notChooseDd.hide(1000);
 
-        var chooseDd = $(this).parent("dl").find("dd");
         chooseDd.addClass("choice_menu");
         chooseDd.removeClass("not_choice_menu");
-        chooseDd.toggle(1000);
+        chooseDd.show(1000);
+
+        chooseCurrMenu();
     };
 
+    // 当前菜单高亮
+    function chooseCurrMenu(){
+        var currPathName = window.location.pathname;
+
+        $("dd").removeClass("currMenu");
+        var sel = "a[href='"+currPathName+"']";
+        console.log(sel);
+        var currDd = $(sel).parent("dd");
+        currDd.addClass("currMenu");
+
+        return currDd.parent("dl").attr("id");
+    }
 </script>

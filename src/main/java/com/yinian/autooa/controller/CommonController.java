@@ -1,9 +1,12 @@
 package com.yinian.autooa.controller;
 
+import com.yinian.autooa.model.SysUser;
+import com.yinian.autooa.service.system.SysUserService;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
 import org.apache.shiro.subject.Subject;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -18,6 +21,9 @@ import javax.servlet.http.HttpSession;
  */
 @Controller
 public class CommonController extends BaseController{
+
+    @Autowired
+    private SysUserService sysUserService;
 
     @GetMapping("/")
     public String index(){
@@ -46,8 +52,10 @@ public class CommonController extends BaseController{
             mv.setViewName("login");
             return mv;
         }
+        SysUser user = sysUserService.getUserByAccount(account);
 
         session.setAttribute("account", account);
+        session.setAttribute("user", user);
         mv.setViewName("index");
         return mv;
     }

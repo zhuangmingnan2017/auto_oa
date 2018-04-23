@@ -1,4 +1,4 @@
-package com.yinian.autooa.service.impl;
+package com.yinian.autooa.service.impl.system;
 
 import com.alibaba.fastjson.JSON;
 import com.yinian.autooa.dao.autocode.SysPermissionMapper;
@@ -156,5 +156,24 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         SysPermissionExample permissionExample = new SysPermissionExample();
         permissionExample.createCriteria().andIdIn(permissionIdList);
         return sysPermissionMapper.selectByExample(permissionExample);
+    }
+
+    @Override
+    public void delByPermissionCode(String permissionCode) {
+        SysPermissionExample permissionExample = new SysPermissionExample();
+        permissionExample.createCriteria().andPermission_codeEqualTo(permissionCode);
+
+        sysPermissionMapper.deleteByExample(permissionExample);
+    }
+
+    @Override
+    public void updatePermissionCode(String oldPermissionCode, String newPermissionCode) {
+        SysPermissionExample permissionExample = new SysPermissionExample();
+        permissionExample.createCriteria().andPermission_codeEqualTo(oldPermissionCode);
+
+        SysPermission permission = new SysPermission();
+        permission.setPermission_code(newPermissionCode);
+
+        sysPermissionMapper.updateByExampleSelective(permission, permissionExample);
     }
 }

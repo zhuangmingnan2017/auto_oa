@@ -1,0 +1,339 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.yinian.autooa.dao.autocode.ScheduleMapper" >
+  <resultMap id="BaseResultMap" type="com.yinian.autooa.model.Schedule" >
+    <id column="id" property="id" jdbcType="INTEGER" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="start_datetime" property="start_datetime" jdbcType="TIMESTAMP" />
+    <result column="end_datetime" property="end_datetime" jdbcType="TIMESTAMP" />
+    <result column="type" property="type" jdbcType="INTEGER" />
+    <result column="belong_id" property="belong_id" jdbcType="INTEGER" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.yinian.autooa.model.Schedule" extends="BaseResultMap" >
+    <result column="content" property="content" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Example_Where_Clause" >
+    <where >
+      <foreach collection="oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Update_By_Example_Where_Clause" >
+    <where >
+      <foreach collection="example.oredCriteria" item="criteria" separator="or" >
+        <if test="criteria.valid" >
+          <trim prefix="(" suffix=")" prefixOverrides="and" >
+            <foreach collection="criteria.criteria" item="criterion" >
+              <choose >
+                <when test="criterion.noValue" >
+                  and ${criterion.condition}
+                </when>
+                <when test="criterion.singleValue" >
+                  and ${criterion.condition} #{criterion.value}
+                </when>
+                <when test="criterion.betweenValue" >
+                  and ${criterion.condition} #{criterion.value} and #{criterion.secondValue}
+                </when>
+                <when test="criterion.listValue" >
+                  and ${criterion.condition}
+                  <foreach collection="criterion.value" item="listItem" open="(" close=")" separator="," >
+                    #{listItem}
+                  </foreach>
+                </when>
+              </choose>
+            </foreach>
+          </trim>
+        </if>
+      </foreach>
+    </where>
+  </sql>
+  <sql id="Base_Column_List" >
+    id, title, start_datetime, end_datetime, type, belong_id, status
+  </sql>
+  <sql id="Blob_Column_List" >
+    content
+  </sql>
+  <select id="selectByExampleWithBLOBs" resultMap="ResultMapWithBLOBs" parameterType="com.yinian.autooa.model.ScheduleExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from schedule
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+  </select>
+  <select id="selectByExample" resultMap="BaseResultMap" parameterType="com.yinian.autooa.model.ScheduleExample" >
+    select
+    <if test="distinct" >
+      distinct
+    </if>
+    <include refid="Base_Column_List" />
+    from schedule
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+    <if test="orderByClause != null" >
+      order by ${orderByClause}
+    </if>
+    <if test="page != null" >
+      limit #{page.begin} , #{page.length}
+    </if>
+  </select>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Integer" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from schedule
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
+    delete from schedule
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <delete id="deleteByExample" parameterType="com.yinian.autooa.model.ScheduleExample" >
+    delete from schedule
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </delete>
+  <insert id="insert" parameterType="com.yinian.autooa.model.Schedule" >
+    insert into schedule (id, title, start_datetime, 
+      end_datetime, type, belong_id, 
+      status, content)
+    values (#{id,jdbcType=INTEGER}, #{title,jdbcType=VARCHAR}, #{start_datetime,jdbcType=TIMESTAMP}, 
+      #{end_datetime,jdbcType=TIMESTAMP}, #{type,jdbcType=INTEGER}, #{belong_id,jdbcType=INTEGER}, 
+      #{status,jdbcType=VARCHAR}, #{content,jdbcType=LONGVARCHAR})
+    <selectKey resultType="int" keyProperty="id" order="AFTER" >
+      <![CDATA[SELECT LAST_INSERT_ID() AS id ]]>
+    </selectKey>
+  </insert>
+  <insert id="insertSelective" parameterType="com.yinian.autooa.model.Schedule" >
+    insert into schedule
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="start_datetime != null" >
+        start_datetime,
+      </if>
+      <if test="end_datetime != null" >
+        end_datetime,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="belong_id != null" >
+        belong_id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="content != null" >
+        content,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="start_datetime != null" >
+        #{start_datetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="end_datetime != null" >
+        #{end_datetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=INTEGER},
+      </if>
+      <if test="belong_id != null" >
+        #{belong_id,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+    <selectKey resultType="int" keyProperty="id" order="AFTER" >
+      <![CDATA[SELECT LAST_INSERT_ID() AS id ]]>
+    </selectKey>
+  </insert>
+  <select id="countByExample" parameterType="com.yinian.autooa.model.ScheduleExample" resultType="java.lang.Integer" >
+    select count(*) from schedule
+    <if test="_parameter != null" >
+      <include refid="Example_Where_Clause" />
+    </if>
+  </select>
+  <update id="updateByExampleSelective" parameterType="map" >
+    update schedule
+    <set >
+      <if test="record.id != null" >
+        id = #{record.id,jdbcType=INTEGER},
+      </if>
+      <if test="record.title != null" >
+        title = #{record.title,jdbcType=VARCHAR},
+      </if>
+      <if test="record.start_datetime != null" >
+        start_datetime = #{record.start_datetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.end_datetime != null" >
+        end_datetime = #{record.end_datetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="record.type != null" >
+        type = #{record.type,jdbcType=INTEGER},
+      </if>
+      <if test="record.belong_id != null" >
+        belong_id = #{record.belong_id,jdbcType=INTEGER},
+      </if>
+      <if test="record.status != null" >
+        status = #{record.status,jdbcType=VARCHAR},
+      </if>
+      <if test="record.content != null" >
+        content = #{record.content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExampleWithBLOBs" parameterType="map" >
+    update schedule
+    set id = #{record.id,jdbcType=INTEGER},
+      title = #{record.title,jdbcType=VARCHAR},
+      start_datetime = #{record.start_datetime,jdbcType=TIMESTAMP},
+      end_datetime = #{record.end_datetime,jdbcType=TIMESTAMP},
+      type = #{record.type,jdbcType=INTEGER},
+      belong_id = #{record.belong_id,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=VARCHAR},
+      content = #{record.content,jdbcType=LONGVARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByExample" parameterType="map" >
+    update schedule
+    set id = #{record.id,jdbcType=INTEGER},
+      title = #{record.title,jdbcType=VARCHAR},
+      start_datetime = #{record.start_datetime,jdbcType=TIMESTAMP},
+      end_datetime = #{record.end_datetime,jdbcType=TIMESTAMP},
+      type = #{record.type,jdbcType=INTEGER},
+      belong_id = #{record.belong_id,jdbcType=INTEGER},
+      status = #{record.status,jdbcType=VARCHAR}
+    <if test="_parameter != null" >
+      <include refid="Update_By_Example_Where_Clause" />
+    </if>
+  </update>
+  <update id="updateByPrimaryKeySelective" parameterType="com.yinian.autooa.model.Schedule" >
+    update schedule
+    <set >
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="start_datetime != null" >
+        start_datetime = #{start_datetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="end_datetime != null" >
+        end_datetime = #{end_datetime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="type != null" >
+        type = #{type,jdbcType=INTEGER},
+      </if>
+      <if test="belong_id != null" >
+        belong_id = #{belong_id,jdbcType=INTEGER},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="content != null" >
+        content = #{content,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.yinian.autooa.model.Schedule" >
+    update schedule
+    set title = #{title,jdbcType=VARCHAR},
+      start_datetime = #{start_datetime,jdbcType=TIMESTAMP},
+      end_datetime = #{end_datetime,jdbcType=TIMESTAMP},
+      type = #{type,jdbcType=INTEGER},
+      belong_id = #{belong_id,jdbcType=INTEGER},
+      status = #{status,jdbcType=VARCHAR},
+      content = #{content,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.yinian.autooa.model.Schedule" >
+    update schedule
+    set title = #{title,jdbcType=VARCHAR},
+      start_datetime = #{start_datetime,jdbcType=TIMESTAMP},
+      end_datetime = #{end_datetime,jdbcType=TIMESTAMP},
+      type = #{type,jdbcType=INTEGER},
+      belong_id = #{belong_id,jdbcType=INTEGER},
+      status = #{status,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <insert id="insertBatchSelective" parameterType="java.util.List" >
+    insert into schedule
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      id,
+      title,
+      start_datetime,
+      end_datetime,
+      type,
+      belong_id,
+      status,
+      content,
+    </trim>
+     values 
+    <foreach collection="list" index="index" item="item" separator="," >
+      <trim prefix=" (" suffix=")" suffixOverrides="," >
+        #{item.id,jdbcType=INTEGER},
+        #{item.title,jdbcType=VARCHAR},
+        #{item.start_datetime,jdbcType=TIMESTAMP},
+        #{item.end_datetime,jdbcType=TIMESTAMP},
+        #{item.type,jdbcType=INTEGER},
+        #{item.belong_id,jdbcType=INTEGER},
+        #{item.status,jdbcType=VARCHAR},
+        #{item.content,jdbcType=LONGVARCHAR},
+      </trim>
+    </foreach>
+  </insert>
+</mapper>
