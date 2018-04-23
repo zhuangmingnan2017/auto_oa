@@ -89,4 +89,28 @@ public class SysUserServiceImpl implements SysUserService {
     public void delById(Integer userId) {
         sysUserMapper.deleteByPrimaryKey(userId);
     }
+
+    /**
+     * 获取用户
+     *
+     * @param userId
+     * @return
+     */
+    @Override
+    public SysUser getUserByUserId(Integer userId) {
+        return sysUserMapper.selectByPrimaryKey(userId);
+    }
+
+    /**
+     * 获取部门id下的用户
+     *
+     * @param departId
+     * @return
+     */
+    @Override
+    public List<SysUser> listUserByDepartId(Integer departId) {
+        SysUserExample example = new SysUserExample();
+        example.createCriteria().andDepart_idEqualTo(departId);
+        return sysUserMapper.selectByExample(example);
+    }
 }

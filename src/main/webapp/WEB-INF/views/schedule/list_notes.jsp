@@ -9,7 +9,7 @@
 <html>
 
 <head>
-    <title>用户管理-基于工作流的办公自动化系统</title>
+    <title>我的便签-基于工作流的办公自动化系统</title>
     <%@ include  file="../common/header.jsp"%>
 
     <style>
@@ -27,11 +27,6 @@
 <%@ include  file="../common/barside.jsp"%>
 
 <div class="container">
-    <div class="row">
-        <h3><a href="#" onclick="toggleDiv(this);" class="glyphicon glyphicon-upload"></a>部门日程</h3><br />
-        <p><button class="btn btn-default btn-sm" onclick="addSchedule('dept');">新增部门日程</button><small>（部门成员均可见）</small></p>
-        <hr />
-    </div>
     <div class="row" id="dept_schedule_row">
         <div class="col-md-3">
             <div class="thumbnail">
@@ -43,24 +38,6 @@
             </div>
         </div>
     </div>
-    <div class="row">
-        <h3><a href="#" onclick="toggleDiv(this);" class="glyphicon glyphicon-upload"></a>我的日程</h3>
-        <p><button class="btn btn-default btn-sm"  onclick="addSchedule('my');">新增我的日程</button><small>（仅自己可见可见）</small></p>
-        <hr />
-    </div>
-    <div class="row" id="my_schedule_row">
-        <div class="col-md-3">
-            <div class="thumbnail">
-                <div class="caption">
-                    <h3>大会议室开会</h3>
-                    <p>2018/4/22 12：00：00</p>
-                    <p><a href="#" class="btn btn-primary" role="button">完成</a> <a href="#" class="btn btn-danger" role="button">删除</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
 
 <!-- Modal -->
 <div class="modal" id="addScheduleModal" tabindex="-1" role="dialog" aria-labelledby="addScheduleModalLabel">
@@ -218,7 +195,7 @@
         var userId = ${sessionScope.user.id};
         var departId = ${sessionScope.user.depart_id};
 
-        var statusStr = "00A,00P";
+        var statusStr = "00X";
         var url = "${basePath}/oa/schedule/list.do?userId="+userId+"&departId="+departId+"&statusStr="+statusStr;
         $.get(url, function (data) {
             if (data.code !== 0) {
@@ -262,12 +239,12 @@
             isOutOfDate = true;
             outOfDateSpanHtml = "<span style='font-size:0.5em;color:red;'>[已过期]</span>";
         }
-        var eleHtml = "<div class=\"col-md-3\" style=\"cursor:pointer\" onclick='loadSchedule("+scheduleId+")'>\n" +
+        var eleHtml = "<div class=\"col-md-3\">\n" +
             "            <div class=\"thumbnail\">\n" +
             "                <div class=\"caption\">\n" +
             "                    <h3>"+title+outOfDateSpanHtml+"</h3>\n" +
             "                    <p>"+UnixToDate(startDatetime,'Y-m-d')+"-->"+UnixToDate(endDatetime,'Y-m-d')+"</p>\n" +
-            "                    <p><button onclick=\"finishSchedule("+scheduleId+")\" class=\"btn btn-primary\" role=\"button\">完成该日程(可以在历史日程找到)</button></p>\n" +
+            /*"                    <p><button onclick=\"finishSchedule("+scheduleId+")\" class=\"btn btn-primary\" role=\"button\">完成该日程(可以在历史日程找到)</button></p>\n" +*/
             "                </div>\n" +
             "            </div>\n" +
             "        </div>";
@@ -288,22 +265,6 @@
             setTimeout(function () {
                 window.location.reload();
             },1000);
-        });
-    }
-
-    function loadSchedule(scheduleId){
-        var url = "${basePath}/oa/schedule/detail.do?scheduleId="+scheduleId;
-        $.get(url, function (data) {
-            if (data.code !== 0) {
-                sweetAlert("哎呦,获取日程详情出错", data.message, "error");
-                return;
-            }
-
-            if (data.data == null) {
-                return;
-            }
-
-            swal("日程["+data.title+"]内容", data.content);
         });
     }
 

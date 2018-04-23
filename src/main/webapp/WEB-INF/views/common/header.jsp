@@ -17,6 +17,7 @@
 <link href="${basePath}/static/css/font-awesome/4.7.0/font-awesome.min.css" rel="stylesheet" />
 <link href="${basePath}/static/css/sweetalter-1.1.3/sweetalter.css" rel="stylesheet" />
 <link href="${basePath}/static/css/bootstrap-datepicker/1.8.0/bootstrap-datepicker.css" rel="stylesheet" />
+<link href="${basePath}/static/css/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.css" rel="stylesheet" />
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
 <script src="https://cdn.bootcss.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -31,6 +32,8 @@
 <script src="${basePath}/static/js/extend/sweetalert2.min.js" ></script>
 <script src="${basePath}/static/js/extend/bootstrap-datepicker/1.8.0/bootstrap-datepicker.js"></script>
 <script src="${basePath}/static/js/extend/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
+<script src="${basePath}/static/js/extend/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.js"></script>
+<script src="${basePath}/static/js/extend/jquery-contextmenu/3.0.0-beta.2/jquery.ui.position.js"></script>
 
 <%--登录控制--%>
 <%--

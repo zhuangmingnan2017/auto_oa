@@ -29,7 +29,7 @@
 <div class="container">
     <div class="row">
         <h3><a href="#" onclick="toggleDiv(this);" class="glyphicon glyphicon-upload"></a>部门日程</h3><br />
-        <p><button class="btn btn-default btn-sm" onclick="addSchedule('dept');">新增部门日程</button><small>（部门成员均可见）</small></p>
+        <%--<p><button class="btn btn-default btn-sm" onclick="addSchedule('dept');">新增部门日程</button><small>（部门成员均可见）</small></p>--%>
         <hr />
     </div>
     <div class="row" id="dept_schedule_row">
@@ -45,7 +45,7 @@
     </div>
     <div class="row">
         <h3><a href="#" onclick="toggleDiv(this);" class="glyphicon glyphicon-upload"></a>我的日程</h3>
-        <p><button class="btn btn-default btn-sm"  onclick="addSchedule('my');">新增我的日程</button><small>（仅自己可见可见）</small></p>
+        <%--<p><button class="btn btn-default btn-sm"  onclick="addSchedule('my');">新增我的日程</button><small>（仅自己可见可见）</small></p>--%>
         <hr />
     </div>
     <div class="row" id="my_schedule_row">
@@ -55,64 +55,6 @@
                     <h3>大会议室开会</h3>
                     <p>2018/4/22 12：00：00</p>
                     <p><a href="#" class="btn btn-primary" role="button">完成</a> <a href="#" class="btn btn-danger" role="button">删除</a></p>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
-
-
-<!-- Modal -->
-<div class="modal" id="addScheduleModal" tabindex="-1" role="dialog" aria-labelledby="addScheduleModalLabel">
-    <div class="modal-dialog" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="javascript:$('#addScheduleModal').hide(1000);">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-                <h4 class="modal-title" id="addScheduleModalLabel">新增菜单</h4>
-            </div>
-            <div class="modal-body">
-                <form class="form-horizontal" id="addScheduleForm" action="#" method="post">
-                    <input type="hidden" id="scheduleType" />
-                    <div class="form-group">
-                        <label for="schedule_type_input" class="col-sm-2 control-label">日程类型</label>
-                        <div class="col-md-10">
-                            <input type="text" class="form-control" id="schedule_type_input" value="部门日程" disabled>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="modal_schedule_title" class="col-sm-2 control-label">标题</label>
-                        <div class="col-md-10">
-                            <input type="text" class="form-control" id="modal_schedule_title" name="title" placeholder="日程标题">
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="modal_schedule_start_datetime" class="col-sm-2 control-label">日程开始时间</label>
-                        <div class="col-md-10 date inline">
-                            <input type="text" class="form-control" id="modal_schedule_start_datetime" name="start_datetime">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="modal_schedule_end_datetime" class="col-sm-2 control-label">日程结束时间</label>
-                        <div class="col-md-10 date inline">
-                            <input type="text" class="form-control" id="modal_schedule_end_datetime" name="end_datetime">
-                            <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
-                        </div>
-                    </div>
-                    <div class="form-group">
-                        <label for="modal_schedule_content" class="col-sm-2 control-label">详情</label>
-                        <div class="col-md-12">
-                           <textarea id="modal_schedule_content" name="content" placeholder="日程详情" rows="10" class="form-control"></textarea>
-                        </div>
-                    </div>
-                </form>
-            </div>
-            <div class="modal-footer row">
-                <div class="col-md-12">
-                    <button class="btn btn-default" data-dismiss="modal" onclick="javascript:$('#addScheduleModal').hide(1000);">关闭</button>
-                    <button class="btn btn-primary" onclick="scheduleFormSubmit();">添加</button>
                 </div>
             </div>
         </div>
@@ -218,7 +160,7 @@
         var userId = ${sessionScope.user.id};
         var departId = ${sessionScope.user.depart_id};
 
-        var statusStr = "00A,00P";
+        var statusStr = "00X";
         var url = "${basePath}/oa/schedule/list.do?userId="+userId+"&departId="+departId+"&statusStr="+statusStr;
         $.get(url, function (data) {
             if (data.code !== 0) {
@@ -262,12 +204,12 @@
             isOutOfDate = true;
             outOfDateSpanHtml = "<span style='font-size:0.5em;color:red;'>[已过期]</span>";
         }
-        var eleHtml = "<div class=\"col-md-3\" style=\"cursor:pointer\" onclick='loadSchedule("+scheduleId+")'>\n" +
+        var eleHtml = "<div class=\"col-md-3\">\n" +
             "            <div class=\"thumbnail\">\n" +
             "                <div class=\"caption\">\n" +
             "                    <h3>"+title+outOfDateSpanHtml+"</h3>\n" +
             "                    <p>"+UnixToDate(startDatetime,'Y-m-d')+"-->"+UnixToDate(endDatetime,'Y-m-d')+"</p>\n" +
-            "                    <p><button onclick=\"finishSchedule("+scheduleId+")\" class=\"btn btn-primary\" role=\"button\">完成该日程(可以在历史日程找到)</button></p>\n" +
+            /*"                    <p><button onclick=\"finishSchedule("+scheduleId+")\" class=\"btn btn-primary\" role=\"button\">完成该日程(可以在历史日程找到)</button></p>\n" +*/
             "                </div>\n" +
             "            </div>\n" +
             "        </div>";
@@ -288,22 +230,6 @@
             setTimeout(function () {
                 window.location.reload();
             },1000);
-        });
-    }
-
-    function loadSchedule(scheduleId){
-        var url = "${basePath}/oa/schedule/detail.do?scheduleId="+scheduleId;
-        $.get(url, function (data) {
-            if (data.code !== 0) {
-                sweetAlert("哎呦,获取日程详情出错", data.message, "error");
-                return;
-            }
-
-            if (data.data == null) {
-                return;
-            }
-
-            swal("日程["+data.title+"]内容", data.content);
         });
     }
 

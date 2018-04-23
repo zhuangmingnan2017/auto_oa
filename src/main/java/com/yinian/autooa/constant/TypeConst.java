@@ -11,4 +11,12 @@ public interface TypeConst {
         int DEPART = 1;
         int MY = 2;
     }
+
+    interface FileShareType{
+        int ONLY_ME = 1;
+        int DEPART_VIEW = 2;
+        int DEPART_OWN = 3;
+        int ALL_VIEW = 4;
+        int ALL_OWN = 5;
+    }
 }

@@ -29,6 +29,11 @@ public class ScheduleController extends BaseController {
         return "schedule/list_schedule";
     }
 
+    @GetMapping("history/list.html")
+    public String goHistorySchedulePage(){
+        return "schedule/list_history_schedule";
+    }
+
     @GetMapping("list.do")
     @ResponseBody
     public ApiResponse listScheduleByUserIdAndDeptId(Integer userId, Integer departId, String statusStr){

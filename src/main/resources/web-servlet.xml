@@ -57,8 +57,10 @@
 
 	<bean id="multipartResolver"
 		  class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<!-- one of the properties available; the maximum file size in bytes -->
-		<property name="maxUploadSize" value="50000000" />
+		<!--文件上传的指定编码格式 -->
+		<property name="defaultEncoding" value="utf-8"/>
+		<!-- 上传文件大小的最大值，单位是字节，1G-->
+		<property name="maxUploadSize" value="50000000"/>
 	</bean>
 
 	<!-- 使用jsp作为视图 -->

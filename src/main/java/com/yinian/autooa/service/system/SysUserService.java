@@ -42,4 +42,18 @@ public interface SysUserService {
      * @param userId
      */
     void delById(Integer userId);
+
+    /**
+     * 获取用户
+     * @param userId
+     * @return
+     */
+    SysUser getUserByUserId(Integer userId);
+
+    /**
+     * 获取部门id下的用户
+     * @param depart_id
+     * @return
+     */
+    List<SysUser> listUserByDepartId(Integer depart_id);
 }
