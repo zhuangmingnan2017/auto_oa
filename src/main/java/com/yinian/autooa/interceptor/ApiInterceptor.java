@@ -42,6 +42,11 @@ public class ApiInterceptor implements HandlerInterceptor {
         String domain = request.getScheme()+"://"+serverName;
         logger.debug("[Interceptor]访问的域名地址=[{}]",domain);
 
+        if(request.getSession().getAttribute("user") == null){
+            response.sendRedirect("/login.html");
+            return false;
+        }
+
         return true;
     }
 

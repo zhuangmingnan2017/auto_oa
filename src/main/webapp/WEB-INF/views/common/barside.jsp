@@ -6,25 +6,45 @@
 <c:set var="projectPath" value="${pageContext.request.contextPath}" />
 
 <style>
-    .choice_menu{
-        color:lightskyblue;
-        background-color: lime;
-    }
-    .not_choice_menu{
-        color: black;
-    }
-    .mask {
-        position: absolute;
-        top: 0;
-        left: 0;
-        height: 100%;
-        width: 100%;
-        background: black;
-        z-index: 2000;
+    .currMenu{
+        background-color: #495A80;
     }
 
-    .currMenu{
-        background-color: pink;
+    #sidebarDiv dt{
+        padding-top: 5px;
+        padding-bottom: 5px;
+    }
+    #sidebarDiv dt,#sidebarDiv dt *{
+        color:white;
+        font-size: 1.3em;
+    }
+    #sidebarDiv dd, #sidebarDiv dd *{
+        color:white;
+        font-size: 1.1em;
+    }
+
+    #sidebarDiv{
+        margin-top: -10px;
+        margin-right: 5px;
+        padding:0;
+        background-color: #3992d0;
+        height: 100%;
+    }
+    #sidebarDiv dl{
+        width: 100%;
+        color:white;
+        padding: 0;
+        margin-left: 0;
+    }
+    #sidebarDiv dt, #sidebarDiv dd{
+        width: 100%;
+        color:white;
+
+        padding-left: 2em;
+        padding-right: 2em;
+    }
+    #sidebarDiv dt:hover, #sidebarDiv dd:hover{
+        background-color: #317eb4;
     }
 </style>
 
@@ -48,11 +68,11 @@
                 <li><a href="#"><span class="glyphicon glyphicon-home"></span></a></li>
                 <li><a href="#">
                     <c:choose>
-                        <c:when test="${sessionScope.USER_NAME == null or sessionScope.USER_NAME == ''}">
+                        <c:when test="${sessionScope.user == null or sessionScope.user == ''}">
                             用户
                         </c:when>
                         <c:otherwise>
-                            ${sessionScope.USER_NAME}
+                            ${sessionScope.user.username}
                         </c:otherwise>
                     </c:choose>
                 </a>
@@ -66,9 +86,9 @@
     </div>
 </nav>
 
-<div class="container-fluid" style="margin-top:60px;">
+<div class="container-fluid" style="margin-top:60px;" >
     <div class="row">
-        <div class="col-sm-3 col-md-2 sidebar" id="sidebarDiv">
+        <div class="col-sm-4 col-md-4 col-lg-1 sidebar" id="sidebarDiv">
             <dl class="menu1">
                 <dt>人事管理</dt>
                 <dd class="first_dd"><a href="#">部门管理</a></dd>
@@ -77,18 +97,18 @@
             </dl>
             <dl class="menu2">
                 <dt>日程管理</dt>
-                <dd class="first_dd"><a href="#">部门日程</a></dd>
+                <dd><a href="#">部门日程</a></dd>
                 <dd><a href="#">我的日程</a></dd>
                 <dd><a href="#">我的便签</a></dd>
             </dl>
             <dl class="menu3">
                 <dt>文件管理</dt>
-                <dd class="first_dd"><a href="#">文件管理</a></dd>
+                <dd><a href="#">文件管理</a></dd>
                 <dd><a href="#">回收站</a></dd>
             </dl>
             <dl class="menu3">
                 <dt>消息管理</dt>
-                <dd class="first_dd"><a href="#">短信管理</a></dd>
+                <dd><a href="#">短信管理</a></dd>
                 <dd><a href="#">邮件管理</a></dd>
                 <dd><a href="#">论坛</a></dd>
             </dl>
@@ -107,7 +127,7 @@
                 <dd><a href="#">设置</a></dd>
             </dl>
         </div>
-<div class="col-sm-9 col-md-10  main">
+<div class="col-sm-7 col-md-7 col-lg-10 main" style="margin-left: 30px;">
 <script type="text/javascript">
     $(function () {
         // 先获取菜单，再执行隐藏操作
@@ -117,7 +137,20 @@
         var currParentMenuId = chooseCurrMenu();
 
         sidebarMenuClick(currParentMenuId);
+
+        // 将dd和a链接绑定
+        ddClickBindLink();
     });
+
+    function ddClickBindLink(){
+        $("dd").each(function () {
+            var ddEle = $(this);
+            ddEle.click(function () {
+                var url = ddEle.find("a").attr("href");
+                window.location.replace(url);
+            });
+        });
+    }
 
     /* 获取菜单 */
     function listMenu(){

@@ -10,10 +10,15 @@ import com.yinian.autooa.service.BaseService;
 import com.yinian.autooa.service.file.FileService;
 import com.yinian.autooa.service.system.SysUserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.*;
 
 /**
@@ -30,31 +35,7 @@ public class FileServiceImpl extends BaseService implements FileService {
 
     @Override
     public List<File> listRootFileByUserId(Integer userId) {
-        SysUser user = sysUserService.getUserByUserId(userId);
-
-        FileExample fileExample = new FileExample();
-        fileExample.createCriteria()
-                .andUpload_user_idEqualTo(userId);
-        fileExample.or(fileExample.createCriteria()
-                .andUpload_user_idNotEqualTo(userId)
-                .andShare_typeIn(Arrays.asList(TypeConst.FileShareType.ALL_OWN, TypeConst.FileShareType.ALL_VIEW)));
-        if(user.getDepart_id() != null && user.getDepart_id() > 0){
-            List<SysUser> userList = sysUserService.listUserByDepartId(user.getDepart_id());
-            if(!userList.isEmpty()){
-                List<Integer> userIdList = new ArrayList<Integer>(userList.size());
-                for(SysUser user1 : userList){
-                    userIdList.add(user1.getId());
-                }
-                fileExample.or(
-                        fileExample.createCriteria()
-                                .andUpload_user_idIn(userIdList)
-                                .andShare_typeIn(Arrays.asList(TypeConst.FileShareType.DEPART_OWN, TypeConst.FileShareType.DEPART_VIEW))
-                );
-            }
-        }
-        fileExample.setOrderByClause(" id desc ");
-
-        return fileMapper.selectByExample(fileExample);
+        return listFileByUserIdAndCurrParentId(userId, 0);
     }
 
     @Override
@@ -113,7 +94,10 @@ public class FileServiceImpl extends BaseService implements FileService {
             fileIdList.add(Integer.valueOf(fileId));
         }
         FileExample example = new FileExample();
-        example.createCriteria().andIdIn(fileIdList);
+        example.createCriteria()
+                .andIdIn(fileIdList);
+
+        example.or(example.createCriteria().andParent_idIn(fileIdList));
 
         fileMapper.deleteByExample(example);
     }
@@ -125,6 +109,7 @@ public class FileServiceImpl extends BaseService implements FileService {
         file.setUpload_user_id(user.getId());
         file.setUpload_username(user.getUsername());
         file.setShare_type(TypeConst.FileShareType.ONLY_ME);
+        file.setLast_modify_datetime(new Date());
         file.setSize(0);
 
         fileMapper.insertSelective(file);
@@ -157,5 +142,74 @@ public class FileServiceImpl extends BaseService implements FileService {
         file.setId(fileId);
 
         fileMapper.updateByPrimaryKeySelective(file);
+    }
+
+    @Override
+    public List<File> listFileByUserIdAndCurrParentId(Integer userId, Integer parentId) {
+        SysUser user = sysUserService.getUserByUserId(userId);
+
+        FileExample fileExample = new FileExample();
+        fileExample.createCriteria()
+                .andUpload_user_idEqualTo(userId)
+                .andParent_idEqualTo(parentId);
+        fileExample.or(fileExample.createCriteria()
+                .andUpload_user_idNotEqualTo(userId)
+                .andShare_typeIn(Arrays.asList(TypeConst.FileShareType.ALL_OWN, TypeConst.FileShareType.ALL_VIEW))
+                .andParent_idEqualTo(parentId));
+
+        if(user.getDepart_id() != null && user.getDepart_id() > 0){
+            List<SysUser> userList = sysUserService.listUserByDepartId(user.getDepart_id());
+            if(!userList.isEmpty()){
+                List<Integer> userIdList = new ArrayList<Integer>(userList.size());
+                for(SysUser user1 : userList){
+                    userIdList.add(user1.getId());
+                }
+                fileExample.or(
+                        fileExample.createCriteria()
+                                .andUpload_user_idIn(userIdList)
+                                .andShare_typeIn(Arrays.asList(TypeConst.FileShareType.DEPART_OWN, TypeConst.FileShareType.DEPART_VIEW))
+                                .andParent_idEqualTo(parentId)
+                );
+            }
+        }
+        fileExample.setOrderByClause(" id desc ");
+
+        return fileMapper.selectByExample(fileExample);
+    }
+
+    @Override
+    public Integer getFileParentId(Integer fileId) {
+
+        File file = fileMapper.selectByPrimaryKey(fileId);
+        if(file == null){
+            return null;
+        }
+
+       return file.getParent_id();
+    }
+
+    @Override
+    public ResponseEntity<byte[]> downloadFileByFileId(Integer fileId) {
+        File file = fileMapper.selectByPrimaryKey(fileId);
+
+        String fileName = file.getName();
+        String fileRealPath = FileConst.FILE_UPLOAD_DIR + file.getLocation();
+
+        byte[] body=null;
+        try {
+            InputStream in=new FileInputStream(new java.io.File(fileRealPath));//将该文件加入到输入流之中
+            body=new byte[in.available()];// 返回下一次对此输入流调用的方法可以不受阻塞地从此输入流读取（或跳过）的估计剩余字节数
+            in.read(body);//读入到输入流里面
+
+            fileName=new String(fileName.getBytes("gbk"),"iso8859-1");//防止中文乱码
+        } catch (IOException e) {
+            logger.error("上传文件出错", e);
+        }
+
+        HttpHeaders headers=new HttpHeaders();//设置响应头
+        headers.add("Content-Disposition", "attachment;filename="+fileName);
+        HttpStatus statusCode = HttpStatus.OK;//设置响应吗
+
+        return new ResponseEntity<byte[]>(body, headers, statusCode);
     }
 }

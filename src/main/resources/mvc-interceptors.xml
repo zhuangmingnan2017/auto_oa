@@ -12,11 +12,14 @@
 	<!--**************interceptors **************************-->
 	<mvc:interceptors>
         <mvc:interceptor>
+        	<mvc:mapping path="/**/*.html" />
         	<mvc:mapping path="/**/*.do" />
             	<bean class="com.yinian.autooa.interceptor.ApiInterceptor">
 					<property name="excludeUrls">
 						<list>
-
+							<value>/login.html</value>
+							<value>/login.do</value>
+							<value>/error/*.html</value>
 						</list>
 					</property>
 			</bean>

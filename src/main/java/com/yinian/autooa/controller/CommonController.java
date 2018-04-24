@@ -60,7 +60,7 @@ public class CommonController extends BaseController{
         return mv;
     }
 
-    @GetMapping("/error/{errorCode}")
+    @GetMapping("/error/{errorCode}.html")
     public  ModelAndView errorPage(@PathVariable("errorCode") String errorCode){
         return new ModelAndView("error/"+errorCode);
     }
