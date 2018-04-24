@@ -163,13 +163,13 @@
             console.log(loginUrl);
             swal({
                 title: "请登录后操作",
-                text: "3秒后为您跳转登录页面,您可以点击<a href="+loginUrl+" style='cursor:pointer'>这里</a>进行跳转...",
+                text: "3秒后为您跳转登录页面,您可以点击<a href="+loginUrl+">这里</a>进行跳转...",
                 html: true
             });
 
             setTimeout(function () {
                 window.location.replace(loginUrl);
-            }, 3000);
+            }, 2000);
             return ;
         }
 
@@ -212,16 +212,16 @@
         console.log(parentMenuId+"=====");
         var chooseDd = $("dl[id='"+parentMenuId+"']").find("dd");
         if(chooseDd.eq(0).css("display") === "block"){
-            chooseDd.hide(1000);
+            chooseDd.hide(500);
             return ;
         }
 
         var notChooseDd = $("dl[id!='"+parentMenuId+"']").find("dd");
-        notChooseDd.hide(1000);
+        notChooseDd.hide(500);
 
         chooseDd.addClass("choice_menu");
         chooseDd.removeClass("not_choice_menu");
-        chooseDd.show(1000);
+        chooseDd.show(500);
 
         chooseCurrMenu();
     };

@@ -56,4 +56,6 @@ public interface SysUserService {
      * @return
      */
     List<SysUser> listUserByDepartId(Integer depart_id);
+
+    void changeUserDepart(Integer userId, Integer departmentId);
 }

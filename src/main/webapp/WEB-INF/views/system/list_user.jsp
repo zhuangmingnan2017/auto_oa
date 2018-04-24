@@ -1,4 +1,6 @@
-<%@ page import="java.util.Date" %><%--
+<%@ page import="java.util.Date" %>
+<%@ page import="com.yinian.autooa.model.Department" %>
+<%@ page import="java.util.Map" %><%--
   Created by IntelliJ IDEA.
   User: zhuangmingnan
   Date: 18-4-4
@@ -60,6 +62,7 @@
                 <th>电子邮件</th>
                 <th>性别</th>
                 <th>地址</th>
+                <th>部门</th>
                 <th>操作</th>
             </tr>
         </thead>
@@ -77,8 +80,12 @@
                     <c:if test="${item.sex == 1}">男</c:if>
                 </td>
                 <td>${item.address}</td>
+                <td name="departmentTdEle_${item.depart_id}">
+                    --
+                </td>
                 <td>
                     <button class="btn btn-primary btn-sm" onclick="userRoleSet(${item.id},'${item.username}');">分配角色</button>
+                    <button class="btn btn-primary btn-sm" onclick="setUserDepartment(${item.id});">设置归属部门</button>
                     <button class="btn btn-primary btn-sm" onclick="updateUserMess(${item.id}, '${item.username}', this);">编辑用户信息</button>
                     <button class="btn btn-danger btn-sm" onclick="delUserByUserId(${item.id});">删除用户信息</button>
                 </td>
@@ -216,9 +223,23 @@
 </div>
 <%-- 新增/编辑用户信息 modal end--%>
 
+<%-- 更改用户部门用div --%>
+<div style="display: none;" id="changeUserDepartmentDiv">
+    <form action="" method="post">
+        <input type="hidden" name="userId">
+        <select name="departmentId" class="form-control">
+            <option value="0">==不设置部门==</option>
+        </select>
+    </form>
+</div>
+
 <%@ include  file="../common/footer.jsp"%>
 
 <script type="text/javascript">
+    $(function () {
+        fillUserDepartmentMess();
+    });
+
     function addNewUserMess(){
         $("#addOrUpdateUserMessModal input[type='hidden']").val("");
         $("#addOrUpdateUserMessModal input[type='text']").val("");
@@ -532,6 +553,52 @@
                     swal("删除！", data.message, "error");
                 })
             });
+    }
+    // 填充用户已有的部门信息
+    function fillUserDepartmentMess() {
+        <c:forEach items="${departmentMap}" var="item">
+            $("td[name='departmentTdEle_${item.key}']").text("${item.value.depart_name}");
+        </c:forEach>
+    }
+
+    // 设置用户所属部门
+    function setUserDepartment(userId){
+        console.log("a");
+
+        var cDiv = $("#changeUserDepartmentDiv");
+        cDiv.find("input[name='userId']").val(userId);
+        var form = cDiv.find("form");
+
+        var url = "${basePath}/oa/system/user/department/change.html";
+        form.attr("action", url);
+
+        loadDepartmentMess();
+
+        commonModal("设置用户部门", "changeUserDepartmentDiv", function () {
+            form.submit();
+        });
+    }
+
+    // 加载部门信息
+    function loadDepartmentMess(){
+        var url = "${basePath}/oa/human/department/list.do";
+
+        $.get(url, function (data) {
+            if(data.code !== 0 ){
+                errMsg(data.message);
+                return ;
+            }
+
+            // 先清空
+            var selectEle = $("#changeUserDepartmentDiv select[name='departmentId']");
+            selectEle.find("option:not(:first)").remove();
+
+            $.each(data.data, function (index, content) {
+                // 给select添加选项
+                selectEle.append($("<option value="+content.id+">"+content.depart_name+"</option>"));
+
+            })
+        });
     }
 </script>
 

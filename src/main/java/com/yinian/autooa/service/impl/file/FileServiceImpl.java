@@ -136,7 +136,8 @@ public class FileServiceImpl extends BaseService implements FileService {
     }
 
     @Override
-    public void renameFileName(Integer fileId, String fileName) {
+    public void renameFileName(Integer fileId, String fileName, SysUser user) {
+
         File file = new File();
         file.setName(fileName);
         file.setId(fileId);
@@ -153,7 +154,6 @@ public class FileServiceImpl extends BaseService implements FileService {
                 .andUpload_user_idEqualTo(userId)
                 .andParent_idEqualTo(parentId);
         fileExample.or(fileExample.createCriteria()
-                .andUpload_user_idNotEqualTo(userId)
                 .andShare_typeIn(Arrays.asList(TypeConst.FileShareType.ALL_OWN, TypeConst.FileShareType.ALL_VIEW))
                 .andParent_idEqualTo(parentId));
 

@@ -113,4 +113,13 @@ public class SysUserServiceImpl implements SysUserService {
         example.createCriteria().andDepart_idEqualTo(departId);
         return sysUserMapper.selectByExample(example);
     }
+
+    @Override
+    public void changeUserDepart(Integer userId, Integer departmentId) {
+        SysUser user = new SysUser();
+        user.setDepart_id(departmentId);
+        user.setId(userId);
+
+        sysUserMapper.updateByPrimaryKeySelective(user);
+    }
 }

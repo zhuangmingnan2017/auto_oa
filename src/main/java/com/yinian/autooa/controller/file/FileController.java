@@ -1,6 +1,7 @@
 package com.yinian.autooa.controller.file;
 
 import com.yinian.autooa.common.ApiResponse;
+import com.yinian.autooa.common.XMsg;
 import com.yinian.autooa.controller.BaseController;
 import com.yinian.autooa.model.File;
 import com.yinian.autooa.model.SysUser;
@@ -121,8 +122,14 @@ public class FileController extends BaseController {
 
     @PostMapping("rename.do")
     @ResponseBody
-    public ApiResponse renameFile(Integer fileId, String fileName){
-        fileService.renameFileName(fileId, fileName);
+    public ApiResponse renameFile(Integer fileId, String fileName, HttpSession session){
+
+        SysUser user = (SysUser)session.getAttribute("user");
+        if(user == null){
+            return ApiResponse.getResponse(XMsg.AUTH_FAILED);
+        }
+
+        fileService.renameFileName(fileId, fileName, user);
         return ApiResponse.getDefaultResponse();
     }
 

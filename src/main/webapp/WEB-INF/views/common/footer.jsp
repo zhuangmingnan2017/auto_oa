@@ -5,6 +5,32 @@
   Time: 下午3:42
   To change this template use File | Settings | File Templates.
 --%>
+<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
+
+<!-- 封装通用Modal -->
+<div class="modal" id="commonModal" tabindex="-1" role="dialog" aria-labelledby="commonModalLabel">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="javascript:$('#commonModal').hide(500);">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+                <h4 class="modal-title" id="commonModalLabel">用户操作</h4>
+            </div>
+            <div class="modal-body">
+
+            </div>
+            <div class="modal-footer row">
+                <div class="col-md-12">
+                    <button class="btn btn-default" data-dismiss="modal" onclick="javascript:$('#commonModal').hide(500);">关闭</button>
+                    <button class="btn btn-primary" id="confirmBtn">确认</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
 </div>
 </div>
 </div>
@@ -28,7 +54,7 @@
             }
         });
         return o;
-    }
+    };
 
     $.jsonPost = function(url, data, callBack){
         $.post({
@@ -62,5 +88,53 @@
             ymdhis += time.getUTCSeconds();
         }
         return ymdhis;
+    }
+
+    /**
+     * 通用的删除用的提示语
+     * @param postUrl
+     */
+    function delNotice(postUrl){
+        swal({
+                title: "确定删除吗？",
+                text: "删除内容不可恢复",
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "确认删除！",
+                cancelButtonText: "再想想",
+                closeOnConfirm: false
+            },
+            function(){
+                $.post(postUrl, {}, function (data, textStatus, jqXHR) {
+                    if(data.code !== 0){
+                        swal("哎呦,出错了...", data.message, "error");
+                        return ;
+                    }
+
+                    window.location.reload();
+                })
+            });
+    }
+
+    /**
+     * 通用显示弹窗
+     * @param title 弹窗标题
+     * @param bodyEleId 内容组件id
+     * @param okInvokeFunc 单击确认调用的方法
+     */
+    function commonModal(title, bodyEleId, okInvokeFunc){
+        var modal = $("#commonModal");
+
+        $("#commonModalLabel").text(title);
+        var bodyEle = $("#"+bodyEleId);
+        modal.find("div.modal-body").append(bodyEle);
+        bodyEle.show();
+        modal.show();
+        $("#confirmBtn").click(okInvokeFunc);
+    }
+
+    function errMsg(message){
+        swal("哎哟出错了", message, "error");
     }
 </script>

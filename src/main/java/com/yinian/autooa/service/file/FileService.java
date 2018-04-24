@@ -26,7 +26,7 @@ public interface FileService {
 
     void changeFileShareType(String fileIdStr, Integer shareType);
 
-    void renameFileName(Integer fileId, String fileName);
+    void renameFileName(Integer fileId, String fileName, SysUser user);
 
     List<File> listFileByUserIdAndCurrParentId(Integer id, Integer parentId);
 
