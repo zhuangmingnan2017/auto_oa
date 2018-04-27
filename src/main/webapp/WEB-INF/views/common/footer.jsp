@@ -93,8 +93,9 @@
     /**
      * 通用的删除用的提示语
      * @param postUrl
+     * @param postData
      */
-    function delNotice(postUrl){
+    function delNotice(postUrl, postData){
         swal({
                 title: "确定删除吗？",
                 text: "删除内容不可恢复",
@@ -106,7 +107,7 @@
                 closeOnConfirm: false
             },
             function(){
-                $.post(postUrl, {}, function (data, textStatus, jqXHR) {
+                $.post(postUrl, postData, function (data, textStatus, jqXHR) {
                     if(data.code !== 0){
                         swal("哎呦,出错了...", data.message, "error");
                         return ;
@@ -137,4 +138,39 @@
     function errMsg(message){
         swal("哎哟出错了", message, "error");
     }
+
+    /**
+     * 校验电子邮件
+     * @param email
+     * @returns {boolean}
+     */
+    function checkEmail(email) {
+        if(email === null || email === ''){
+            return false;
+        }
+        var myReg=/^[a-zA-Z0-9_-]+@([a-zA-Z0-9]+\.)+(com|cn|net|org)$/;
+        return myReg.test(email);
+    }
+
+    function checkPhone(phone) {
+        if(phone === null || phone === ''){
+            return false;
+        }
+        var myReg=/^1[0-9]{10}$/;
+        return myReg.test(phone);
+    }
+
+    // 获取错误信息span
+    function getWrongSpanEle(text){
+        return $("<span style='color:red'>"+text+"</span>")
+    }
+
+    // 将所有的datepicker格式成选择日期
+    $(function () {
+        //日期插件
+        $(".datepicker").datetimepicker({
+            //format: 'yyyy-mm-dd hh:ii:ss',//显示格式
+            locale: 'zh-cn'
+        });
+    })
 </script>

@@ -1,7 +1,7 @@
 package com.yinian.autooa.service.impl.message;
 
 import com.yinian.autooa.service.BaseService;
-import com.yinian.autooa.service.message.MailService;
+import com.yinian.autooa.service.message.MessageService;
 import com.yinian.autooa.vo.input.message.MailSendInputVO;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
@@ -19,7 +19,7 @@ import java.util.Properties;
  * created by yinian on 18-4-24.
  */
 @Service
-public class MailServiceImpl extends BaseService implements MailService {
+public class MessageServiceImpl extends BaseService implements MessageService {
 
     @Value("${mail.send.account}")
     private String sendAccount;

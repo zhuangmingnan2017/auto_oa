@@ -1,15 +1,15 @@
 package com.yinian.autooa.controller;
 
-import com.yinian.autooa.common.Page;
-import com.yinian.autooa.util.str.UuidUtil;
-import com.yinian.autooa.util.web.PageData;
+import com.yinian.autooa.common.exception.UserNotLoginException;
+import com.yinian.autooa.model.SysUser;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.web.context.request.RequestContextHolder;
-import org.springframework.web.context.request.ServletRequestAttributes;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * created by yinian on 18-4-5.
@@ -20,50 +20,24 @@ public class BaseController {
 
     private static final long serialVersionUID = 6357869213649815390L;
 
-    /** new PageData对象
-     * @return
-     */
-    public PageData getPageData(){
-        return new PageData(this.getRequest());
+    protected static Map<String, String> getParamMapByRequest(HttpServletRequest request){
+        Enumeration enu=request.getParameterNames();
+
+        Map<String, String> map = new HashMap<String, String>();
+        while(enu.hasMoreElements()){
+            String paraName=(String)enu.nextElement();
+            map.put(paraName, request.getParameter(paraName));
+        }
+
+        return map;
     }
 
-    /**得到ModelAndView
-     * @return
-     */
-    public ModelAndView getModelAndView(){
-        return new ModelAndView();
-    }
+    protected SysUser getSessionUser(HttpSession session){
+        SysUser user = (SysUser)session.getAttribute("user");
+        if(user == null){
+            throw new UserNotLoginException();
+        }
 
-    /**得到request对象
-     * @return
-     */
-    public HttpServletRequest getRequest() {
-        HttpServletRequest request = ((ServletRequestAttributes)RequestContextHolder.getRequestAttributes()).getRequest();
-        return request;
-    }
-
-    /**得到32位的uuid
-     * @return
-     */
-    public String get32UUID(){
-        return UuidUtil.get32UUID();
-    }
-
-    /**得到分页列表的信息
-     * @return
-     */
-    public Page getPage(){
-        return new Page();
-    }
-
-    public static void logBefore(Logger logger, String interfaceName){
-        logger.info("");
-        logger.info("start");
-        logger.info(interfaceName);
-    }
-
-    public static void logAfter(Logger logger){
-        logger.info("end");
-        logger.info("");
+        return user;
     }
 }

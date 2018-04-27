@@ -167,12 +167,13 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     }
 
     @Override
-    public void updatePermissionCode(String oldPermissionCode, String newPermissionCode) {
+    public void updatePermissionMess(String oldPermissionCode, String newPermissionCode, String name) {
         SysPermissionExample permissionExample = new SysPermissionExample();
         permissionExample.createCriteria().andPermission_codeEqualTo(oldPermissionCode);
 
         SysPermission permission = new SysPermission();
         permission.setPermission_code(newPermissionCode);
+        permission.setPermission_name(name);
 
         sysPermissionMapper.updateByExampleSelective(permission, permissionExample);
     }

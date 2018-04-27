@@ -62,7 +62,7 @@ public class AcBaseController extends BaseController {
 	 * @return
 	 * @throws UnsupportedEncodingException
 	 */
-	protected String createModel(String process_id,String process_author,String name,String modelname,String description,String category) throws UnsupportedEncodingException{
+	/*protected String createModel(String process_id,String process_author,String name,String modelname,String description,String category) throws UnsupportedEncodingException{
 		
 		ObjectMapper objectMapper = new ObjectMapper();
         ObjectNode editorNode = objectMapper.createObjectNode();
@@ -95,7 +95,7 @@ public class AcBaseController extends BaseController {
         repositoryService.addModelEditorSource(modelData.getId(), editorNode.toString().getBytes("utf-8"));//保存资源,存储数据到表：act_ge_bytearray 二进制数据表
         
         return modelData.getId();
-	}
+	}*/
 	
 	/**从流程定义映射模型
 	 * @param processDefinitionId //流程定义ID

@@ -9,7 +9,7 @@
 <html>
 
 <head>
-    <title>发送邮件-基于工作流的办公自动化系统</title>
+    <title>发送短信-基于工作流的办公自动化系统</title>
     <%@ include  file="../common/header.jsp"%>
 
     <style>
@@ -46,7 +46,7 @@
             <div class="col-md-4 col-lg-4 col-sm-3">
                 <select class="form-control" id="emailSelectEle">
                     <c:forEach items="${userList}" var="item" varStatus="status">
-                        <option value="${item.email}">${item.username}[邮箱：${item.email}]</option>
+                        <option value="${item.phone}">${item.username}[手机：${item.phone}]</option>
                     </c:forEach>
                 </select>
             </div>
@@ -57,22 +57,15 @@
     </div>
 </div>
 <div class="row">
-    <h4 style="background-color: green; color: white; padding: 5px; display: none;" id="sendingTip">[邮件]发送中....</h4>
+    <h4 style="background-color: green; color: white; padding: 5px; display: none;" id="sendingTip">[短信]发送中....</h4>
     <form action="${basePath}/oa/message/mail/send.html" method="post" id="mailSendForm">
         <div class="form-group">
             <label for="receiveMailStr">收件人</label>
             <input type="text" id="receiveMailStr" name="receiveMailStr" class="form-control">
         </div>
         <div class="form-group">
-            <label for="mailTitle">邮件主题</label>
-                <input type="text" id="mailTitle" name="title" class="form-control">
-        </div>
-        <div class="form-group">
             <label for="mailContent">内容：</label>
-                <textarea name="content" id="mailContent" class="form-control" style="display: none;"></textarea>
-            <script id="myFormDesign" type="text/plain" style="width:100%;height: 500px;">
-            </script>
-
+                <textarea name="content" id="mailContent" class="form-control" rows="20" ></textarea>
             <button class="btn btn-success" type="button" onclick="mailSendClick();">发送</button>
         </div>
     </form>
@@ -86,10 +79,8 @@
             mailSendTipShow();
         });
 
-        loadEditor();
-
         <c:if test="${status != null and status == 'OK'}">
-            swal("发送邮件成功");
+            swal("发送短信成功");
         </c:if>
     });
 
@@ -99,7 +90,7 @@
         tip.show();
 
         setInterval(function () {
-            var text = '[邮件]发送中';
+            var text = '[短信]发送中';
             for(var i = 1; i <= loadingCount; i++){
                 text += '..';
             }
@@ -117,8 +108,8 @@
     function addRecipients(){
         var email = $("#emailSelectEle").val();
 
-        if(!checkEmail(email)){
-            errMsg("所选联系人未配置邮件或邮件格式配置错误");
+        if(!checkPhone(email)){
+            errMsg("所选联系人未配置手机号码或号码格式配置错误");
             return ;
         }
 
@@ -126,7 +117,7 @@
         var nowReceiveMailStr = receiveMailInputEle.val();
 
         if(nowReceiveMailStr.indexOf(email) >= 0 ){
-            errMsg("该邮件已经在收件人列表了");
+            errMsg("该号码已经在收件人列表了");
             return ;
         }
 
@@ -137,18 +128,13 @@
         receiveMailInputEle.val(nowReceiveMailStr);
     }
 
-    function loadEditor(){
-        UE.getEditor('myFormDesign');
-        UE.getEditor('myFormDesign').setHeight(300);
-    }
-
     function mailSendClick(){
-        var content = UE.getEditor('myFormDesign').getAllHtml();
-
-        $("#mailContent").text(content);
-
         if(sendMailValidate()){
-            $("#mailSendForm").submit();
+            /*$("#mailSendForm").submit();*/
+            mailSendTipShow();
+            setTimeout(function () {
+                window.location.replace(window.location.href+"?status=OK");
+            }, 5000);
         }
     }
 
@@ -157,22 +143,13 @@
 
         var mailStrEle = $("#receiveMailStr");
         if(mailStrEle.val() === ''){
-            mailStrEle.focus();
             mailStrEle.after($("<span style='color:red;'>收件人不能为空</span>"))
-            isValidateOK = false;
-        }
-
-        var mailTitleEle = $("#mailTitle");
-        if(mailTitleEle.val() === ''){
-            mailTitleEle.focus();
-            mailTitleEle.after($("<span style='color:red;'>邮件主题不能为空</span>"))
             isValidateOK = false;
         }
 
         var mailContentEle = $("#mailContent");
         if(mailContentEle.val() === ''){
-            mailContentEle.focus();
-            mailContentEle.after($("<span style='color:red;'>邮件内容不能为空</span>"))
+            mailContentEle.after($("<span style='color:red;'>内容不能为空</span>"))
             isValidateOK = false;
         }
 

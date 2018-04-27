@@ -4,7 +4,6 @@ import com.yinian.autooa.dao.autocode.SysMenuMapper;
 import com.yinian.autooa.model.SysMenu;
 import com.yinian.autooa.model.SysMenuExample;
 import com.yinian.autooa.model.SysPermission;
-import com.yinian.autooa.model.SysPermissionExample;
 import com.yinian.autooa.service.system.SysPermissionService;
 import com.yinian.autooa.service.system.SysMenuService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -111,7 +110,7 @@ public class SysMenuServiceImpl implements SysMenuService {
         sysMenuMapper.updateByPrimaryKeySelective(menu);
 
         // 编辑菜单的时候顺便更新权限信息
-        sysPermissionService.updatePermissionCode(oldMenu.getPermission(), menu.getPermission());
+        sysPermissionService.updatePermissionMess(oldMenu.getPermission(), menu.getPermission(), menu.getName());
 
     }
 

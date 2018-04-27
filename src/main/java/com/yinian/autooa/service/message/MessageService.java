@@ -9,7 +9,7 @@ import javax.mail.NoSuchProviderException;
  * 邮件相关服务
  * created by yinian on 18-4-24.
  */
-public interface MailService {
+public interface MessageService {
 
 
     void sendMail(MailSendInputVO inputVO);

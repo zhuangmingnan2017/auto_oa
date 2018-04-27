@@ -8,15 +8,24 @@
 <meta name="description" content="">
 <meta name="author" content="">
 <link rel="icon" href="${pageContext.request.contextPath}/favicon.ico">
+<%-- 通用路径变量 --%>
 
 <%--项目的根目录--%>
-<c:set var="basePath" value="${basePath}" />
+<c:set var="basePath" value="${pageContext.request.contextPath}" />
+<c:set var="modelPre" value="${basePath}/oa/workflow/model/" />
+<c:set var="definitionPre" value="${basePath}/oa/workflow/definition/" />
+<c:set var="instancePre" value="${basePath}/oa/workflow/instance/" />
+<c:set var="formPre" value="${basePath}/oa/workflow/form/" />
+<c:set var="taskPre" value="${basePath}/oa/workflow/task/" />
+
+<c:set var="projectPath" value="${pageContext.request.contextPath}" />
 
 <!-- Bootstrap core CSS -->
 <link href="${basePath}/static/css/bootstrap/3.3.7/bootstrap.min.css" rel="stylesheet" />
 <link href="${basePath}/static/css/font-awesome/4.7.0/font-awesome.min.css" rel="stylesheet" />
 <link href="${basePath}/static/css/sweetalter-1.1.3/sweetalter.css" rel="stylesheet" />
 <link href="${basePath}/static/css/bootstrap-datepicker/1.8.0/bootstrap-datepicker.css" rel="stylesheet" />
+<link href="${basePath}/static/css/bootstrap-datetimepicker/4.17.47/bootstrap-datetimepicker.css" rel="stylesheet" />
 <link href="${basePath}/static/css/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.css" rel="stylesheet" />
 <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 <!--[if lt IE 9]>
@@ -34,10 +43,12 @@
 <script src="${basePath}/static/js/extend/bootstrap-datepicker/locales/bootstrap-datepicker.zh-CN.min.js"></script>
 <script src="${basePath}/static/js/extend/jquery-contextmenu/3.0.0-beta.2/jquery.contextMenu.js"></script>
 <script src="${basePath}/static/js/extend/jquery-contextmenu/3.0.0-beta.2/jquery.ui.position.js"></script>
+<script src="${basePath}/static/js/extend/moment.js/2.22.1/moment.js"></script>
+<script src="${basePath}/static/js/extend/moment.js/2.22.1/locale/zh-cn.js"></script>
+<script src="${basePath}/static/js/extend/bootstrap-datetimepicker/4.17.47/bootstrap-datetimepicker.min.js"></script>
 
-<%--登录控制--%>
-<%--
-<c:if test="${sessionScope.ACCOUNT == null || sessionScope.ACCOUNT == ''}">
-    <!-- 未登录 -->
-    <c:redirect url="/jump_to_login"/>
-</c:if>--%>
+<%-- ueditor --%>
+<script type="text/javascript" charset="utf-8" src="${pageContext.request.contextPath}/static/js/extend/ueditor/ueditor.config.js?2023"></script>
+<script type="text/javascript" charset="utf-8" src="${pageContext.request.contextPath}/static/js/extend/ueditor/ueditor.all.js?2023"> </script>
+<script type="text/javascript" charset="utf-8" src="${pageContext.request.contextPath}/static/js/extend/ueditor/lang/zh-cn/zh-cn.js?2023"></script>
+

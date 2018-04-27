@@ -3,8 +3,6 @@
 <%@taglib prefix="shiro" uri="http://shiro.apache.org/tags" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-<c:set var="projectPath" value="${pageContext.request.contextPath}" />
-
 <style>
     .currMenu{
         background-color: #495A80;
@@ -238,4 +236,9 @@
 
         return currDd.parent("dl").attr("id");
     }
+
+    // 全局变量，供外置的js文件获取basePath
+    var basePre = "${basePath}";
+    var modelPre ="${modelPre}";
+    var defintionPre = "${definitionPre}";
 </script>

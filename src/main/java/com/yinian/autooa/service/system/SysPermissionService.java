@@ -33,5 +33,5 @@ public interface SysPermissionService {
 
     void delByPermissionCode(String permissionCode);
 
-    void updatePermissionCode(String oldPermissionCode, String newPermissionCode);
+    void updatePermissionMess(String oldPermissionCode, String newPermissionCode, String name);
 }
