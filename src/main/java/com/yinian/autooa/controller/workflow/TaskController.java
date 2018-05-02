@@ -1,9 +1,7 @@
 package com.yinian.autooa.controller.workflow;
 
-import com.yinian.autooa.constant.PagePathConst;
 import com.yinian.autooa.controller.BaseController;
 import com.yinian.autooa.model.SysUser;
-import com.yinian.autooa.service.workflow.OaInstanceService;
 import com.yinian.autooa.service.workflow.OaTaskService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +42,7 @@ public class TaskController extends BaseController {
         Map<String, String> map  = getParamMapByRequest(request);
 
         oaTaskService.completeTask(taskId, map);
-        return "redirect:list.html";
+        return "redirect:/oa/workflow/task/list.html";
     }
 
     @PostMapping("{taskId}/claim.html")
@@ -52,6 +50,6 @@ public class TaskController extends BaseController {
         SysUser user = getSessionUser(session);
 
         oaTaskService.claimTask(taskId, user);
-        return "redirect:list.html";
+        return "redirect:/oa/workflow/task/list.html";
     }
 }

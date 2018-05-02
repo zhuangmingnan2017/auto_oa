@@ -1,5 +1,6 @@
 package com.yinian.autooa.service.impl.workflow;
 
+import com.alibaba.fastjson.JSON;
 import com.yinian.autooa.service.BaseService;
 import com.yinian.autooa.service.workflow.OaFormService;
 import org.activiti.engine.FormService;
@@ -7,9 +8,12 @@ import org.activiti.engine.form.FormData;
 import org.activiti.engine.form.FormProperty;
 import org.activiti.engine.form.StartFormData;
 import org.activiti.engine.form.TaskFormData;
+import org.apache.commons.lang3.time.FastDateFormat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -63,5 +67,12 @@ public class OaFormServiceImpl extends BaseService implements OaFormService {
 
         }
         return map;
+    }
+
+    public static void main(String[] args) throws ParseException {
+        FastDateFormat format = FastDateFormat.getInstance("yyyy-MM-dd");
+        Object date = format.parseObject("2018-11-11");
+
+        System.out.println(JSON.toJSONString(date));
     }
 }

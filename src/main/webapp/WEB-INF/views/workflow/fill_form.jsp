@@ -13,76 +13,23 @@
 <body>
 <%@ include  file="../common/barside.jsp"%>
     <div class="row">
-        <form action="${instancePre}start.html" method="post" id="formFormEle">
-            <input type="hidden" name="definitionId" value="${definitionId}" />
-            <c:if test="${formData != null and formData.formProperties != null}">
-                <c:forEach items="${formData.formProperties}" var="item" varStatus="status">
-                    <c:set var="itemId" value="${item.id}" scope="request"/>
+        <form action="${instancePre}start.html" method="post" id="formFormEle" class="form-horizontal">
+            <input type="hidden" name="bid" id="bid" value="${definitionId}" />
 
-                    <c:if test="${item.type.name == 'string' or item.type.name == 'long'}">
-                        <div class="form-group">
-                            <label for="${item.id}">${item.name}:</label>
-                           <c:if test="${item.writable == null or item.writable == false}">
-                               <input type="text" id="${item.id}" name="${item.id}" class="form-control" disabled/>
-                           </c:if>
-                           <c:if test="${item.writable == true}">
-                              <input type="text" id="${item.id}" name="${item.id}" class="form-control" />
-                           </c:if>
-                        </div>
-                    </c:if>
+            <%--引入表单信息--%>
+            <c:import url="fill_form_sub.jsp" />
 
-                    <c:if test="${item.type.name == 'date'}">
-                        <div class="form-group">
-                            <label for="${item.id}">${item.name}:</label>
-                            <%--java代码解决jstl无法链接字符串问题--%>
-                            <%
-                                String itemId = (String)request.getAttribute("itemId");
-                                itemId = "pattern_"+itemId;
-                                request.setAttribute("itemId", itemId);
-                            %>
-                            <c:if test="${item.writable == null or item.writable == false}">
-                                <input type="text" id="${item.id}"
-                                       name="${item.id}" class="form-control datepicker"
-                                       <c:if test="${typeMetaDataMap != null and typeMetaDataMap[itemId] != null}">
-                                           data-date-format="${fn:toUpperCase(typeMetaDataMap[itemId])}"
-                                       </c:if>
-                                       disabled />
-                            </c:if>
-                            <c:if test="${item.writable == true}">
-                                <input type="text" id="${item.id}"
-                                       name="${item.id}" class="form-control datepicker"
-                                       <c:if test="${typeMetaDataMap != null and typeMetaDataMap[itemId] != null}">
-                                           data-date-format="${fn:toUpperCase(typeMetaDataMap[itemId])}"
-                                       </c:if>
-                                />
-                            </c:if>
+            <div id="divEle1" class="row"></div>
+            <hr />
+            <div id="divEle2" class="row"></div>
+            <hr />
 
-                        </div>
-                    </c:if>
-
-                    <c:if test="${item.type.name == 'enum'}">
-                        <div class="form-group">
-                            <label for="${item.id}">${item.name}:</label>
-                            <select id="${item.id}" name="${item.id}">
-                                <%
-                                    String itemId = (String)request.getAttribute("itemId");
-                                    itemId = "enum_"+itemId;
-                                    request.setAttribute("enumId", itemId);
-                                %>
-                                <c:if test="${typeMetaDataMap != null and not empty typeMetaDataMap[enumId]}">
-                                    <c:forEach items="${typeMetaDataMap[enumId]}" var="enumValue">
-                                        <option value="${enumValue.key}">${enumValue.value}</option>
-                                    </c:forEach>
-                                </c:if>
-                            </select>
-                        </div>
-                    </c:if>
-                </c:forEach>
-            </c:if>
-            <button type="submit" class="btn btn-default" id="submitBtnEle">
-                <i class="glyphicon glyphicon-ok"></i>
-                <span>启动流程</span>
-            </button>
+            <div class="row text-center" id="subBtnDivEle">
+                <button type="submit" class="btn btn-primary" id="submitBtnEle">
+                    <i class="glyphicon glyphicon-ok"></i>
+                    <span>启动流程</span>
+                </button>
+            </div>
         </form>
     </div>
 <%@ include  file="../common/footer.jsp"%>
@@ -93,9 +40,29 @@
     <c:if test="${taskId != null and definitionId == null}">
         $(function () {
             $("#formFormEle").attr("action", "${taskPre}${taskId}/complete.html");
+            $("#bid").val('${taskId}');
             $("#submitBtnEle").find("span").text("完成任务");
         });
     </c:if>
+
+    // 对所有表单进行排列，不允许编辑的排前面，hr，再显示允许编辑的内容
+    $(function () {
+
+        $("input").each(function (index, content) {
+            if($(this).prop("disabled") === true){
+                $("#divEle1").append($(this).parents("div.singleForm"));
+            }else{
+                $("#divEle2").append($(this).parents("div.singleForm"));
+            }
+        });
+        $("select").each(function (index, content) {
+            if($(this).prop("disabled") === true){
+                $("#divEle1").append($(this).parents("div.singleForm"));
+            }else{
+                $("#divEle2").append($(this).parents("div.singleForm"));
+            }
+        })
+    });
 
 </script>
 </html>

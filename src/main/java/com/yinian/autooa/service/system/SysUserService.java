@@ -58,4 +58,22 @@ public interface SysUserService {
     List<SysUser> listUserByDepartId(Integer depart_id);
 
     void changeUserDepart(Integer userId, Integer departmentId);
+
+    /**
+     * discuz同步UCenter退出登录
+     */
+    String uCenterLogout();
+
+    /**
+     * UCenter登录
+     * @param account
+     * @param password
+     */
+    String uCenterLogin(String account, String password);
+
+    /**
+     * 新增UCenter用户
+     * @param user
+     */
+    void addNewUCenter(SysUser user);
 }

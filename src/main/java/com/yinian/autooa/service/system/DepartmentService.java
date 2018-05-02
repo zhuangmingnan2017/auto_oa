@@ -21,4 +21,11 @@ public interface DepartmentService {
 
     // key = departmentId
     Map<String, Department> listDepartmentByDepartmentIdList(List<Integer> departmentIdList);
+
+    /**
+     * 获取部门信息
+     * @param depart_id
+     * @return
+     */
+    Department getDepartmentByDepartId(Integer depart_id);
 }

@@ -1,7 +1,9 @@
 package com.yinian.autooa.service.system;
 
 import com.yinian.autooa.model.SysPermission;
+import com.yinian.autooa.vo.input.common.BaseInputVO;
 import com.yinian.autooa.vo.input.system.SetRolePermissionInputVO;
+import com.yinian.autooa.vo.output.common.BaseOutputVO;
 
 import java.util.List;
 
@@ -27,6 +29,8 @@ public interface SysPermissionService {
 
     List<SysPermission> listAll();
 
+    List<SysPermission> listAll(BaseInputVO inputVO);
+
     void setRolePermission(SetRolePermissionInputVO vo);
 
     List<SysPermission> listRolePermissionByRoleId(Integer roleId);
@@ -34,4 +38,6 @@ public interface SysPermissionService {
     void delByPermissionCode(String permissionCode);
 
     void updatePermissionMess(String oldPermissionCode, String newPermissionCode, String name);
+
+    BaseOutputVO countAll(BaseInputVO inputVO);
 }

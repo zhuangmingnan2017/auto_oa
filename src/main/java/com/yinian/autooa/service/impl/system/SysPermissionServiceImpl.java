@@ -1,6 +1,7 @@
 package com.yinian.autooa.service.impl.system;
 
 import com.alibaba.fastjson.JSON;
+import com.yinian.autooa.common.Page;
 import com.yinian.autooa.dao.autocode.SysPermissionMapper;
 import com.yinian.autooa.dao.autocode.SysRolePermissionMapper;
 import com.yinian.autooa.model.SysPermission;
@@ -9,7 +10,9 @@ import com.yinian.autooa.model.SysRolePermission;
 import com.yinian.autooa.model.SysRolePermissionExample;
 import com.yinian.autooa.service.system.SysPermissionService;
 import com.yinian.autooa.service.system.SysRoleService;
+import com.yinian.autooa.vo.input.common.BaseInputVO;
 import com.yinian.autooa.vo.input.system.SetRolePermissionInputVO;
+import com.yinian.autooa.vo.output.common.BaseOutputVO;
 import jodd.util.StringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -108,6 +111,18 @@ public class SysPermissionServiceImpl implements SysPermissionService {
     }
 
     @Override
+    public List<SysPermission> listAll(BaseInputVO inputVO) {
+
+        Page page = new Page();
+        page.setLength(inputVO.getPageSize());
+        page.setPageNo(inputVO.getCurrPage());
+        SysPermissionExample example = new SysPermissionExample();
+        example.setPage(page);
+
+        return sysPermissionMapper.selectByExample(example);
+    }
+
+    @Override
     public void setRolePermission(SetRolePermissionInputVO vo) {
         Integer roleId = vo.getRoleId();
 
@@ -176,5 +191,27 @@ public class SysPermissionServiceImpl implements SysPermissionService {
         permission.setPermission_name(name);
 
         sysPermissionMapper.updateByExampleSelective(permission, permissionExample);
+    }
+
+    @Override
+    public BaseOutputVO countAll(BaseInputVO inputVO) {
+        BaseOutputVO outputVO = new BaseOutputVO();
+
+        int totalCount =  sysPermissionMapper.countByExample(new SysPermissionExample());
+        if(totalCount == 0){
+            outputVO.setCurrPage(1);
+            outputVO.setTotalPage(inputVO.getPageSize());
+            return outputVO;
+        }
+
+        int totalPage = totalCount / inputVO.getPageSize();
+        if(totalCount % inputVO.getPageSize() > 0){
+            totalPage++;
+        }
+
+        outputVO.setCurrPage(inputVO.getCurrPage());
+        outputVO.setTotalPage(totalPage);
+
+        return outputVO;
     }
 }

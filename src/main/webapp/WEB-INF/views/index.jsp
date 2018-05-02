@@ -18,8 +18,13 @@
 <div class="row-fluid">
     <h1>AUTO-OA基于工作流的办公自动化系统</h1>
     <h2>当前时间：<fmt:formatDate value="<%=new Date()%>" pattern="yyyy-MM-dd HH:mm:ss"/></h2>
-    <h4>欢迎${sessionScope.USER_NAME}</h4>
+    <h4>欢迎${user.username}</h4>
 </div>
 <%@ include  file="common/footer.jsp"%>
+
+<%-- UCenter登录 --%>
+<c:if test="${uCenterJsScript != null}">
+    ${uCenterJsScript}
+</c:if>
 </body>
 </html>

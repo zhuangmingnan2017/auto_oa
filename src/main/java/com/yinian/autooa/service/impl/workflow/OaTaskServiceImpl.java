@@ -1,7 +1,9 @@
 package com.yinian.autooa.service.impl.workflow;
 
+import com.yinian.autooa.model.Department;
 import com.yinian.autooa.model.SysUser;
 import com.yinian.autooa.service.BaseService;
+import com.yinian.autooa.service.system.DepartmentService;
 import com.yinian.autooa.service.workflow.OaTaskService;
 import org.activiti.engine.FormService;
 import org.activiti.engine.TaskService;
@@ -27,11 +29,26 @@ public class OaTaskServiceImpl extends BaseService implements OaTaskService {
     private TaskService taskService;
     @Autowired
     private FormService formService;
+    @Autowired
+    private DepartmentService departmentService;
 
     @Override
     public List<Task> listAllTaskByUser(SysUser user) {
-        return taskService.createTaskQuery().taskCandidateOrAssigned(user.getAccount())
+        List<Task> taskList =
+                taskService.createTaskQuery().taskCandidateOrAssigned(user.getAccount())
                 .orderByTaskId().desc().list();
+
+        if(user.getDepart_id() == null){
+            return taskList;
+        }
+        Department department = departmentService.getDepartmentByDepartId(user.getDepart_id());
+        if(department == null){
+            return taskList;
+        }
+        
+        taskList.addAll(taskService.createTaskQuery().taskCandidateGroup(department.getDepart_name()).orderByTaskCreateTime().desc().list());
+
+        return taskList;
     }
 
     @Override

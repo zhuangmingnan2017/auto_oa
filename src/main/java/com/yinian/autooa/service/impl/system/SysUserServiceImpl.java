@@ -1,5 +1,7 @@
 package com.yinian.autooa.service.impl.system;
 
+import com.fivestars.interfaces.bbs.client.Client;
+import com.fivestars.interfaces.bbs.util.XMLHelper;
 import com.yinian.autooa.dao.autocode.SysUserMapper;
 import com.yinian.autooa.model.SysUser;
 import com.yinian.autooa.model.SysUserExample;
@@ -9,6 +11,7 @@ import org.slf4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.LinkedList;
 import java.util.List;
 
 import static org.slf4j.LoggerFactory.getLogger;
@@ -121,5 +124,70 @@ public class SysUserServiceImpl implements SysUserService {
         user.setId(userId);
 
         sysUserMapper.updateByPrimaryKeySelective(user);
+    }
+
+    @Override
+    public String uCenterLogout() {
+        Client uc = new Client();
+        String $ucsynlogout = uc.uc_user_synlogout();
+        logger.info("退出成功:"+$ucsynlogout);
+
+        return $ucsynlogout;
+    }
+
+    @Override
+    public String uCenterLogin(String account, String password) {
+        Client e = new Client();
+        String result = e.uc_user_login(account, password);
+        String $ucsynlogin = "";
+
+        LinkedList<String> rs = XMLHelper.uc_unserialize(result);
+        if(rs.size()>0){
+            int $uid = Integer.parseInt(rs.get(0));
+            String $username = rs.get(1);
+            String $password = rs.get(2);
+            String $email = rs.get(3);
+            if($uid > 0) {
+                $ucsynlogin = e.uc_user_synlogin($uid);
+            } else if($uid == -1) {
+                logger.info("UCenter-用户不存在,或者被删除");
+            } else if($uid == -2) {
+                logger.info("UCenter-密码错");
+            } else {
+                logger.info("UCenter-未定义");
+            }
+        }else{
+            logger.info("UCenter-Login failed");
+            logger.info(result);
+        }
+        return $ucsynlogin;
+    }
+
+    @Override
+    public void addNewUCenter(SysUser user) {
+        Client uc = new Client();
+        String $returns = uc.uc_user_register(user.getAccount(), user.getPassword() ,user.getEmail());
+        int $uid = Integer.parseInt($returns);
+        if($uid <= 0) {
+            String errMsg = "";
+            if($uid == -1) {
+                errMsg = "用户名不合法";
+            } else if($uid == -2) {
+                errMsg = "包含要允许注册的词语";
+            } else if($uid == -3) {
+                errMsg = "用户名已经存在";
+            } else if($uid == -4) {
+                errMsg = "Email 格式有误";
+            } else if($uid == -5) {
+                errMsg = "Email 不允许注册";
+            } else if($uid == -6) {
+                errMsg = "该 Email 已经被注册";
+            } else {
+                errMsg = "未定义";
+            }
+            throw new RuntimeException(errMsg);
+        } else {
+            logger.debug("OK:------------------------"+$returns);
+        }
     }
 }

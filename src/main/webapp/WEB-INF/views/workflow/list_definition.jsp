@@ -50,10 +50,13 @@
                     <span class="glyphicon glyphicon-lock"></span>
                     挂起
                 </button>
-                <button class="btn btn-danger">
-                    <span class="glyphicon glyphicon-remove"></span>
-                    删除
-                </button>
+                <form action="${definitionPre}del.html" method="post" id="delFormEle">
+										<input type='hidden' value='${item.deploymentId}' name='deploymentId'>
+                    <button class="btn btn-danger" type="button" onclick="delDefinition(this);">
+                        <span class="glyphicon glyphicon-remove"></span>
+                        删除
+                    </button>
+                </form>
             </td>
         </tr>
     </c:forEach>
@@ -64,9 +67,25 @@
 <script type="text/javascript">
     // 跳转启动信息填写页面
     function definitionStart(definitionId) {
-        var url = "${formPre}definition/"+definitionId+"/get.html";
-        window.location.href=url;
+        window.location.href="${formPre}definition/" + definitionId + "/get.html";
     }
+
+    // 删除的表单提交
+		function delDefinition(btnEle){
+				swal({
+						title: "确定删除吗？",
+						text: "如果有正在运行的相关流程，也会被删除",
+						type: "warning",
+						showCancelButton: true,
+						confirmButtonColor: "#DD6B55",
+						confirmButtonText: "确认删除！",
+						cancelButtonText: "再想想",
+						closeOnConfirm: false
+				},
+				function(){
+					$(btnEle).parents('form').submit();
+				});
+		}
 </script>
 </html>
 

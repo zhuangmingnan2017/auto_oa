@@ -2,6 +2,7 @@ package com.yinian.autooa.controller;
 
 import com.yinian.autooa.model.SysUser;
 import com.yinian.autooa.service.system.SysUserService;
+import jodd.util.StringUtil;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.UsernamePasswordToken;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 /**
@@ -34,8 +36,16 @@ public class CommonController extends BaseController{
     }
 
     @GetMapping("login.html")
-    public String loginPage(){
-        return "login";
+    public ModelAndView loginPage(HttpSession session){
+        ModelAndView mv = new ModelAndView("login");
+
+        String uCenterLogoutScript = (String)session.getAttribute("uCenterLogoutScript");
+        if(StringUtil.isNotBlank(uCenterLogoutScript)){
+            mv.addObject("uCenterLogoutScript", uCenterLogoutScript);
+            session.removeAttribute("uCenterLogoutScript");
+        }
+
+        return mv;
     }
 
     @PostMapping("login.do")
@@ -54,8 +64,13 @@ public class CommonController extends BaseController{
         }
         SysUser user = sysUserService.getUserByAccount(account);
 
+        // 同步UCenter登录
+        String uCenterJsScript = sysUserService.uCenterLogin(account, password);
+
         session.setAttribute("account", account);
         session.setAttribute("user", user);
+
+        mv.addObject("uCenterJsScript", uCenterJsScript);
         mv.setViewName("index");
         return mv;
     }
@@ -64,4 +79,5 @@ public class CommonController extends BaseController{
     public  ModelAndView errorPage(@PathVariable("errorCode") String errorCode){
         return new ModelAndView("error/"+errorCode);
     }
+
 }

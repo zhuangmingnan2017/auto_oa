@@ -72,8 +72,12 @@
 
 </body>
 
+${uCenterLogoutScript}
+
 <script type="text/javascript">
-    $("#password").password();
+    $(function () {
+        $("#password").password();
+    });
 </script>
 
 </html>

@@ -7,7 +7,6 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
-
 <!-- 封装通用Modal -->
 <div class="modal" id="commonModal" tabindex="-1" role="dialog" aria-labelledby="commonModalLabel">
     <div class="modal-dialog" role="document">
@@ -29,6 +28,29 @@
             </div>
         </div>
     </div>
+</div>
+
+<%--封装通用的分页插件 --%>
+<div style="display: none;" id="pageRow">
+    <nav aria-label="Page navigation">
+        <ul>
+            <li><a href="#" id="pageRow_homeAEle">首页</a></li>
+            <li>
+                <a href="#" aria-label="Previous" id="pageRow_preAEle">
+                    <span aria-hidden="true">&laquo;</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="#" aria-label="Next" id="pageRow_nextAEle">
+                    <span aria-hidden="true">&raquo;</span>
+                </a>
+            </li>
+
+            <li><a href="#" id="pageRow_endAEle">末页</a></li>
+        </ul>
+    </nav>
+    <h5>当前/全部：<span id="pageRow_noticeSpanEle"></span></h5>
 </div>
 
 </div>
@@ -172,5 +194,111 @@
             //format: 'yyyy-mm-dd hh:ii:ss',//显示格式
             locale: 'zh-cn'
         });
-    })
+
+    });
+
+    /**
+     * 将带有指定样式的地方处理成分页显示
+     * @param divEle
+     * @param url
+     * @param currPage
+     * @param totalPage
+     * @param pageSize
+     * @param location
+     */
+    function fillPageEle(divEle, url, currPage, totalPage, pageSize, location){
+        if(['left', 'center', 'right'].indexOf(location) < 0){
+            location = 'right';
+        }
+
+        if(currPage === undefined || totalPage === undefined){
+            return ;
+        }
+        if(pageSize === undefined){
+            pageSize = 10;
+        }
+
+        var homeAEle = $("#pageRow_homeAEle");
+        var preAEle = $("#pageRow_preAEle");
+        var nextAEle = $("#pageRow_nextAEle");
+        var endAEle = $("#pageRow_endAEle");
+        homeAEle.prop("href",url+"?currPage=1&pageSize="+pageSize);
+        preAEle.prop("href", url+"?currPage="+(currPage-1)+"&pageSize="+pageSize);
+        nextAEle.prop("href",url+"?currPage="+(currPage+1)+"&pageSize="+pageSize);
+        endAEle.prop("href", url+"?currPage="+totalPage+"&pageSize="+pageSize);
+
+        // if is the first page
+        if(currPage === 1){
+            homeAEle.parent("li").addClass("disabled");
+            preAEle.parent("li").addClass("disabled");
+            homeAEle.prop("href","#");
+            preAEle.prop("href","#");
+        }else if(currPage === totalPage){
+            // if is the last page
+            nextAEle.parent("li").addClass("disabled");
+            endAEle.parent("li").addClass("disabled");
+            nextAEle.prop("href","#");
+            endAEle.prop("href","#");
+        }
+
+        var nowSeeCount = 0;
+        var seeChoiceCount = 5;
+        var isNeedHelpPageBtn = 10;
+        var insertEle = preAEle.parent("li");
+        var helpEle;
+
+        if(currPage > isNeedHelpPageBtn){
+            // 按钮协助向上翻10页
+            helpEle = $("<li><a href='"+url+"?currPage="+(currPage - isNeedHelpPageBtn)
+                +"&pageSize="+pageSize+"'>...</a></li>");
+            insertEle.after(helpEle);
+            insertEle = helpEle;
+        }
+
+        if((totalPage - currPage) > isNeedHelpPageBtn){
+            // 按钮协助向下翻10页
+            helpEle = $("<li><a href='"+url+"?currPage="+(currPage + isNeedHelpPageBtn)
+                +"&pageSize="+pageSize+"'>...</a></li>");
+            insertEle.after(helpEle);
+            }
+
+        for(var i = 1; i <= totalPage; i++){
+
+            // 跳过
+            if((i - currPage) > seeChoiceCount || (currPage - i) > seeChoiceCount){
+                continue;
+            }
+
+            var newEle = $("<li><a href='"+url+"?currPage="+i+"&pageSize="+pageSize+"'>"+i+"</a></li>");
+            if(i === currPage){
+                newEle.addClass("active");
+            }
+
+            insertEle.after(newEle);
+            insertEle = newEle; /*切换句柄*/
+        }
+
+        var pageRow = $("#pageRow");
+        divEle.append(pageRow);
+        divEle.find("ul").addClass("pagination");
+        $("#pageRow_noticeSpanEle").text(currPage+"/"+totalPage);
+
+        // 给分页配置位置
+        switch (location) {
+            case 'right':
+                console.log('right');
+                divEle.addClass("pull-right");
+                break;
+            case 'center':
+                console.log('center');
+                divEle.addClass("text-center");
+                break;
+            case 'left':
+                console.log('left');
+                divEle.addClass("pull-left");
+                break;
+        }
+
+        pageRow.show();
+    }
 </script>

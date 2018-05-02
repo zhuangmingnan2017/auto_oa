@@ -10,5 +10,8 @@ public interface PagePathConst {
     interface workflow{
         String workflowPre = "workflow/";
         String TASK_LIST = workflowPre + "list_task";
+        String JOIN_INSTANCE_LIST = workflowPre + "list_join_process_instance";
+        String HISTORY_INSTANCE_LIST = workflowPre + "list_history_instance";
+        String HISTORY_INSTANCE_DETAIL = workflowPre + "detail_history_instance";
     }
 }

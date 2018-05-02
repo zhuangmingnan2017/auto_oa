@@ -66,8 +66,8 @@
         </div>
     </div>
 
-    <div clas="row">
-        <table class="table table-hover" style="background-color: lightcyan">
+    <div class="row"  style="overflow-x: hidden; width: 100%; height: 800px;">
+        <table class="table table-hover" style="background-color: lightcyan;">
             <thead>
                 <tr>
                     <th width="5%"></th>

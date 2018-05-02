@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/c"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+     http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
+
+    <bean id="processEngineConfiguration" class="org.activiti.engine.impl.cfg.StandaloneInMemProcessEngineConfiguration">
+        <property name="databaseSchemaUpdate" value="true" />
+        <!--<property name="jobExecutorActivate" value="false" />-->
+        <property name="activityFontName" value="宋体"/>
+        <property name="labelFontName" value="宋体"/>
+        <!--邮件服务相关配置-->
+        <property name="mailServerHost" value="smtp.163.com" />
+        <property name="mailServerUseSSL" value="true" />
+        <property name="mailServerPort" value="465" />
+        <property name="mailServerUsername" value="zhuangmingnan@163.com" />
+        <property name="mailServerPassword" value="qq978624366" />
+    </bean>
+
+</beans>

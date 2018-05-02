@@ -1,9 +1,11 @@
 package com.yinian.autooa.controller.system;
 
 import com.yinian.autooa.common.ApiResponse;
+import com.yinian.autooa.constant.NameConst;
 import com.yinian.autooa.controller.BaseController;
 import com.yinian.autooa.model.SysPermission;
 import com.yinian.autooa.service.system.SysPermissionService;
+import com.yinian.autooa.vo.input.common.BaseInputVO;
 import com.yinian.autooa.vo.input.system.SetRolePermissionInputVO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -23,10 +25,11 @@ public class SysPermissionController extends BaseController {
     private SysPermissionService sysPermissionService;
 
     @GetMapping("list.html")
-    public ModelAndView listAll(){
+    public ModelAndView listAll(BaseInputVO inputVO){
         ModelAndView mv = new ModelAndView();
 
-        mv.addObject("permissionList", sysPermissionService.listAll());
+        mv.addObject("permissionList", sysPermissionService.listAll(inputVO));
+        mv.addObject(NameConst.attributeName.PAGE_MESS, sysPermissionService.countAll(inputVO));
         mv.setViewName("system/list_permission");
         return mv;
     }

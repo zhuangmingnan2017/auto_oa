@@ -66,6 +66,8 @@ public class SysUserController extends BaseController {
             // 没有id，则新增
             user.setId(null);
             sysUserService.addNewUser(user);
+
+            sysUserService.addNewUCenter(user);
         }
         return ApiResponse.getDefaultResponse();
     }

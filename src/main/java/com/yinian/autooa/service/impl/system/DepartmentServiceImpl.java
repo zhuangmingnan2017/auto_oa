@@ -66,4 +66,9 @@ public class DepartmentServiceImpl extends BaseService implements DepartmentServ
 
         return map;
     }
+
+    @Override
+    public Department getDepartmentByDepartId(Integer departId) {
+        return departmentMapper.selectByPrimaryKey(departId);
+    }
 }

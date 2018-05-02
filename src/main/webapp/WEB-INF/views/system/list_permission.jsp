@@ -66,7 +66,6 @@
     </table>
 </div>
 
-
 <!-- Modal -->
 <div class="modal" id="addPermissionModal" tabindex="-1" role="dialog" aria-labelledby="addPermissionModalLabel">
     <div class="modal-dialog" role="document">
@@ -127,9 +126,23 @@
     </div>
 </div>
 
-<%@ include  file="../common/footer.jsp"%>
+<div id="oaPageDivEle"></div>
 
+<%@ include  file="../common/footer.jsp"%>
 <script type="text/javascript">
+    $(function () {
+       // 加载分页条
+        fillPageEle(
+            $("#oaPageDivEle"),
+            '${permissionPre}list.html',
+            ${pageMess.currPage},
+            ${pageMess.totalPage},
+            10,
+            'right'
+        );
+
+    });
+
     function showSubMenu(parentId, invokeTr) {
 
         console.log("showSubMenu invoked, parentId=" + parentId);

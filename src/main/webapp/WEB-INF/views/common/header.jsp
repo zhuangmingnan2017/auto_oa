@@ -12,6 +12,9 @@
 
 <%--项目的根目录--%>
 <c:set var="basePath" value="${pageContext.request.contextPath}" />
+
+<c:set var="permissionPre" value="${basePath}/oa/system/permission/" />
+
 <c:set var="modelPre" value="${basePath}/oa/workflow/model/" />
 <c:set var="definitionPre" value="${basePath}/oa/workflow/definition/" />
 <c:set var="instancePre" value="${basePath}/oa/workflow/instance/" />

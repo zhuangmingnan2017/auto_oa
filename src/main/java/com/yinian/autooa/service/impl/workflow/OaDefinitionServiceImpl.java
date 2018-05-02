@@ -28,6 +28,7 @@ public class OaDefinitionServiceImpl extends BaseService implements OaDefinition
 
     @Override
     public void delByDeploymentId(String deploymentId, boolean isCascade) {
+				isCascade=true;
         ProcessDefinition definition = repositoryService.createProcessDefinitionQuery()
                 .deploymentId(deploymentId)
                 .singleResult();
