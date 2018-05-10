@@ -26,7 +26,7 @@
                 <th>模型分类</th>
                 <th>创建时间</th>
                 <th>修改时间</th>
-                <th>版本</th>
+                <%--<th>版本</th>--%>
                 <th>操作</th>
             </tr>
         </thead>
@@ -38,7 +38,7 @@
         <td>${item.category}</td>
         <td><fmt:formatDate value="${item.createTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
         <td><fmt:formatDate value="${item.lastUpdateTime}" pattern="yyyy-MM-dd HH:mm:ss"/></td>
-        <td>V${item.version}</td>
+        <%--<td>V${item.version}</td>--%>
         <td>
             <button class="btn btn-small btn-success" onclick="deployment(${item.id});">发布</button>
             <a class="btn btn-small btn-primary" href="${basePath}/activiti-editor/modeler.html?modelId=${item.id}" target="_blank" >设计流程</a>

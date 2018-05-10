@@ -234,7 +234,7 @@
             data: JSON.stringify(postData),
             success: function (data) {
                 if(data.code !== 0){
-                    sweetAlert("哎呦……", "出错了！请稍后重试","error");
+                    sweetAlert("哎呦……", data.message,"error");
                     return ;
                 }
 

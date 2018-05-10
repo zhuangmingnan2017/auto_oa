@@ -84,10 +84,12 @@
                     --
                 </td>
                 <td>
-                    <button class="btn btn-primary btn-sm" onclick="userRoleSet(${item.id},'${item.username}');">分配角色</button>
-                    <button class="btn btn-primary btn-sm" onclick="setUserDepartment(${item.id});">设置归属部门</button>
-                    <button class="btn btn-primary btn-sm" onclick="updateUserMess(${item.id}, '${item.username}', this);">编辑用户信息</button>
-                    <button class="btn btn-danger btn-sm" onclick="delUserByUserId(${item.id});">删除用户信息</button>
+                    <c:if test="${item.account != 'admin'}">
+                        <button class="btn btn-primary btn-sm" onclick="userRoleSet(${item.id},'${item.username}');">分配角色</button>
+                        <button class="btn btn-primary btn-sm" onclick="setUserDepartment(${item.id});">设置归属部门</button>
+                        <button class="btn btn-primary btn-sm" onclick="updateUserMess(${item.id}, '${item.username}', this);">编辑用户信息</button>
+                        <button class="btn btn-danger btn-sm" onclick="delUserByUserId(${item.id});">删除用户信息</button>
+                    </c:if>
                 </td>
             </tr>
         </c:forEach>
@@ -304,8 +306,11 @@
             contentType: 'application/json',
             data: JSON.stringify(postData),
             success: function (data) {
+
+                console.log(data.code);
+
                 if(data.code !== 0){
-                    sweetAlert("哎呦……", "出错了！请稍后重试","error");
+                    sweetAlert("哎呦……", data.message,"error");
                     return ;
                 }
 
@@ -521,7 +526,9 @@
         modalSelectEle.html("");
         $.get(url, function (data) {
             $.each(data.data, function (index, content) {
-                modalSelectEle.append($("<option value='"+content.id+"'>"+content.role_name+"</option>"))
+                if(content.role_code !== 'admin'){
+                    modalSelectEle.append($("<option value='"+content.id+"'>"+content.role_name+"</option>"))
+                }
             });
         });
     }

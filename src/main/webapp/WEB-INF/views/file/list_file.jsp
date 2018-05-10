@@ -43,6 +43,7 @@
         <div class="col-md-5">
             <button class="btn btn-primary" onclick="addNewFolder();">新建文件夹</button>
             <button class="btn btn-primary" onclick="javascript:$(this).parent('div').next('div[name=\'changeShareTypeDiv\']').show();">修改分享策略</button>
+            <button class="btn btn-primary" onclick="changeFileOwner();">修改文件所有者</button>
             <button class="btn btn-danger" onclick="batchDeleteOperator();">批量删除</button>
         </div>
         <div class="col-md-4" name="changeShareTypeDiv" style="display: none;">
@@ -64,6 +65,22 @@
                 <span class="glyphicon glyphicon-remove"></span>
             </button>
         </div>
+        <div class="col-md-4" id="changeOwnerDiv" style="display: none;">
+            <form id="changeOwnerForm" action="${basePath}/oa/file/change_owner.html" method="post">
+                <input name="fileIdStr" type="hidden">
+                <input name="parentId" value="${parentId}" type="hidden">
+                <input name="userName" value="${sessionScope.user.username}" type="hidden">
+                <select name="userId" class="form-control">
+
+                </select>
+            </form>
+            <button class="btn btn-success">
+                <span class="glyphicon glyphicon-ok" onclick="changeOwner();"></span>
+            </button>
+            <button class="btn btn-success" onclick="javascript:$('#changeOwnerDiv').hide();">
+                <span class="glyphicon glyphicon-remove"></span>
+            </button>
+        </div>
     </div>
 
     <div class="row"  style="overflow-x: hidden; width: 100%; height: 800px;">
@@ -72,7 +89,7 @@
                 <tr>
                     <th width="5%"></th>
                     <th width="55%">文件名</th>
-                    <th width="10%">上传者</th>
+                    <th width="10%">所有者</th>
                     <th width="10%">文件大小</th>
                     <th width="10%">修改日期</th>
                     <th width="10%">分享策略</th>
@@ -220,6 +237,11 @@
         $("#fileInput").change(function () {
             fileInputChange(this);
         });
+
+        var msg = getRequest()['errmsg'];
+        if(msg !== undefined && msg !== null){
+            swal("错误", msg, "error");
+        }
     });
 
     // 绑定右键菜单
@@ -352,7 +374,7 @@
                 var url = "${basePath}/oa/file/del.do?fileIdStr="+fileIdStr;
                 $.post(url, {}, function (data, textStatus, jqXHR) {
                     if(data.code !== 0){
-                        swal("哎呦,出错了...", data.message, "error");
+                        swal("哎呦,出错了...", '${ERR_MSG}', "error");
                         return ;
                     }
 
@@ -404,14 +426,40 @@
     // 修改分享策略
     function changeShareType(){
         var fileIdStr = getChooseFileIdStr();
-        if(fileIdStr === null){
-            return ;
+        if(fileIdStr === null || fileIdStr === ''){
+            window.location.reload();
         }
 
         var changeShareTypeForm = $("#changeShareTypeForm");
         changeShareTypeForm.find("input[name='fileIdStr']")
             .val(fileIdStr);
         changeShareTypeForm.submit();
+    }
+
+    // 更改文件所有者
+    function changeFileOwner(){
+        var url = "${userPre}list.do";
+        var selectEle = $("#changeOwnerDiv select");
+        $.get(url, function ( data, textStatus, jqXHR ) {
+            $.each(data.data, function (index, content) {
+                var newOption = $("<option value='"+content.id+"'>"+content.username+"</option>")
+                selectEle.append(newOption);
+            });
+        });
+
+        $("#changeOwnerDiv").show();
+    }
+
+    function changeOwner(){
+        var fileIdStr = getChooseFileIdStr();
+        if(fileIdStr === null || fileIdStr === ''){
+            window.location.reload();
+        }
+
+        var changeOwnerForm = $("#changeOwnerForm");
+        changeOwnerForm.find("input[name='fileIdStr']")
+            .val(fileIdStr);
+        changeOwnerForm.submit();
     }
 </script>
 

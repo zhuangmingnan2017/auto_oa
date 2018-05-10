@@ -1,6 +1,7 @@
 package com.yinian.autooa.controller.system;
 
 import com.yinian.autooa.common.ApiResponse;
+import com.yinian.autooa.common.XMsg;
 import com.yinian.autooa.controller.BaseController;
 import com.yinian.autooa.model.SysUser;
 import com.yinian.autooa.service.system.DepartmentService;
@@ -54,6 +55,12 @@ public class SysUserController extends BaseController {
         return mv;
     }
 
+    @GetMapping("list.do")
+    @ResponseBody
+    public ApiResponse listAllUserByAjax(){
+        return ApiResponse.getDefaultResponse().setData(sysUserService.listAllUser());
+    }
+
     @PostMapping("add_or_update.do")
     @ResponseBody
     public ApiResponse addOrUpdate(@RequestBody SysUser user){
@@ -63,11 +70,19 @@ public class SysUserController extends BaseController {
             user.setAccount(null);
             sysUserService.updateSelectiveUserById(user, user.getId());
         }else{
+            try{
+                sysUserService.addNewUCenter(user);
+            }catch (Exception e){
+                logger.error("新增ucenter用户出错", e);
+                ApiResponse apiResponse = new ApiResponse(XMsg.FAIL);
+                apiResponse.setData(e.getMessage());
+                apiResponse.setMsg(e.getMessage());
+                return apiResponse;
+            }
+
             // 没有id，则新增
             user.setId(null);
             sysUserService.addNewUser(user);
-
-            sysUserService.addNewUCenter(user);
         }
         return ApiResponse.getDefaultResponse();
     }

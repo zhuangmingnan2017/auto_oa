@@ -13,13 +13,16 @@
 <%--项目的根目录--%>
 <c:set var="basePath" value="${pageContext.request.contextPath}" />
 
+<c:set var="userPre" value="${basePath}/oa/system/user/" />
 <c:set var="permissionPre" value="${basePath}/oa/system/permission/" />
+<c:set var="rolePre" value="${basePath}/oa/system/role/" />
 
 <c:set var="modelPre" value="${basePath}/oa/workflow/model/" />
 <c:set var="definitionPre" value="${basePath}/oa/workflow/definition/" />
 <c:set var="instancePre" value="${basePath}/oa/workflow/instance/" />
 <c:set var="formPre" value="${basePath}/oa/workflow/form/" />
 <c:set var="taskPre" value="${basePath}/oa/workflow/task/" />
+
 
 <c:set var="projectPath" value="${pageContext.request.contextPath}" />
 
@@ -55,3 +58,8 @@
 <script type="text/javascript" charset="utf-8" src="${pageContext.request.contextPath}/static/js/extend/ueditor/ueditor.all.js?2023"> </script>
 <script type="text/javascript" charset="utf-8" src="${pageContext.request.contextPath}/static/js/extend/ueditor/lang/zh-cn/zh-cn.js?2023"></script>
 
+<script type="text/javascript">
+    $.ajaxSetup({
+        async : false
+    });
+</script>

@@ -13,29 +13,22 @@
     <%@ include  file="../common/header.jsp"%>
 
     <style>
-        .choice_tr{
-            background-color: lightgrey;
-        }
         ul li{
             text-decoration: none;!important;
-        }
-        .errorInput{
-            border: 2px solid red;
-        }
-        .submenuTr{
-            color:black;
-            background-color: lightcyan;
         }
         #rolePermissionSettingModal_having_permission_div>div, .operator_div{
             border: 1px solid green;
             display: inline-block;
             background-color: rgba(193,255,193,0.4);
-            margin-left: 2px;
-            margin-right: 2px;
+            /*margin-left: 2px;
+            margin-right: 2px;*/
         }
         #rolePermissionSettingModal_having_permission_div>div{
-            margin:20px;
+            margin:2px;
             padding:5px;
+        }
+        .fatherMenu{
+            background-color: lightskyblue;
         }
     </style>
 </head>
@@ -46,7 +39,7 @@
 <div class="row">
     <ul style="text-decoration: none;">
         <li>
-            <button class="btn btn-primary" onclick="javascript:$('#addPermissionModal').show(1000);">添加角色</button>
+            <button class="btn btn-primary" onclick="addNewRole();">添加角色</button>
         </li>
     </ul>
 </div>
@@ -62,16 +55,46 @@
             </tr>
         </thead>
         <tbody>
+        <tr style="cursor: pointer;display: none;" id="addNewRowTr"}>
+            <form action="${basePath}add_or_update.do" method="post">
+                <td>新增</td>
+                <td><input type="text" name="role_code"></td>
+                <td><input type="text" name="role_name"></td>
+                <td>
+                    <button class='btn btn-default' style='margin-left:2em;' type="submit">
+                        <span class='glyphicon glyphicon-ok' style='color:cornflowerblue;'></span>
+                    </button>
+                    <button class='btn btn-default' style='margin-left:2em;display: inline;' type="button" onclick="addNewRoleCancel(this)">
+                        <span class='glyphicon glyphicon-remove' style='color:cornflowerblue;'></span>
+                    </button>
+                </td>
+            </form>
+        </tr>
+
         <c:forEach items="${roleList}" var="item" varStatus="status">
             <tr style="cursor: pointer" id="user_tr_${item.id}"}>
                 <input type="hidden" name="role_id" value="${item.id}"/>
                 <td>${status.index+1}</td>
                 <td>${item.role_code}</td>
                 <td>${item.role_name}</td>
+                <form action="${basePath}add_or_update.do" method="post">
+                    <input type="hidden" name="id" value="${item.id}">
+                    <td style="display: none;">${status.index+1}</td>
+                    <td style="display: none;"><input type="text" name="role_code" value="${item.role_code}"></td>
+                    <td style="display: none;"><input type="text" name="role_name" value="${item.role_name}"></td>
+                    <td style="display: none;">
+                        <button class='btn btn-default' style='margin-left:2em;' type="submit">
+                            <span class='glyphicon glyphicon-ok' style='color:cornflowerblue;'></span>
+                        </button>
+                        <button class='btn btn-default' style='margin-left:2em;display: inline;' type="button" onclick="editNewRoleCancel(this)">
+                            <span class='glyphicon glyphicon-remove' style='color:cornflowerblue;'></span>
+                        </button>
+                    </td>
+                </form>
                 <td>
                     <button class="btn btn-primary btn-sm" onclick="rolePermissionSet(${item.id},'${item.role_name}');">分配权限</button>
-                    <button class="btn btn-primary btn-sm">编辑角色信息</button>
-                    <button class="btn btn-danger btn-sm">删除角色信息</button>
+                    <button class="btn btn-primary btn-sm" onclick="editRoleMess('#user_tr_${item.id}');">编辑角色信息</button>
+                    <button class="btn btn-danger btn-sm" onclick="delRole(${item.id}, '${item.role_name}');">删除角色信息</button>
                 </td>
             </tr>
         </c:forEach>
@@ -85,7 +108,7 @@
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="javascript:$('#addPermissionModal').hide(1000);">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close" onclick="javascript:$('#rolePermissionSettingModal').hide(1000);">
                     <span aria-hidden="true">&times;</span>
                 </button>
                 <h4 class="modal-title" id="rolePermissionSettingModalLabel">角色权限配置</h4>
@@ -171,12 +194,13 @@
             $("#rolePermissionSettingModal_having_permission_div").html("");
             $.each( data.data, function(index, content)
             {
-                $("#rolePermissionSettingModal_having_permission_div").append(
+                var newDivEle =
                     $("<div id='role_having_permission_"+content.id+"'>"+content.permission_name+
-                        "<span style='cursor: pointer'" +
-                        "onmouseover='cancelSpanMouseOver(this);' onmouseout='cancelSpanMouseout(this);' onclick='cancelSpanClick(this);'>&nbsp;X&nbsp;</span>" +
-                        "<input type='hidden' value='"+content.id+"' /></div>")
-                )
+                    "<span style='cursor: pointer'" +
+                    "onmouseover='cancelSpanMouseOver(this);' onmouseout='cancelSpanMouseout(this);' onclick='cancelSpanClick(this);'>&nbsp;X&nbsp;</span>" +
+                    "<input type='hidden' value='"+content.id+"' /></div>");
+
+                $("#rolePermissionSettingModal_having_permission_div").append(newDivEle);
             });
         });
     }
@@ -189,7 +213,10 @@
         modalSelectEle.html("");
         $.get(url, function (data) {
             $.each(data.data, function (index, content) {
-                modalSelectEle.append($("<option value='"+content.id+"'>"+content.permission_name+"</option>"))
+                // only if the role doesn't have the permission to add it into option
+                if($("#role_having_permission_"+content.id).length <= 0){
+                    modalSelectEle.append($("<option value='"+content.id+"'>"+content.permission_name+"</option>"));
+                }
             });
         });
     }
@@ -237,12 +264,53 @@
             return ;
         }
 
+        if(selectEle === undefined || permissionId === undefined){
+            swal("没有权限了");
+            return;
+        }
+
         $("#rolePermissionSettingModal_having_permission_div").append(
             $("<div id='role_having_permission_"+permissionId+"'>"+selectEle.text()+"" +
                 "<span style='cursor: pointer'" +
                 "onmouseover='cancelSpanMouseOver(this);' onmouseout='cancelSpanMouseout(this);' onclick='cancelSpanClick(this);'>&nbsp;X&nbsp;</span>" +
                 "<input type='hidden' value='"+permissionId+"' /></div>")
-        )
+        );
+
+        // after add this permission, we need to remove it from select's option
+        var modalSelectEle = $("#rolePermissionSettingModal_add_new_permission_select");
+        modalSelectEle.find("option[value="+permissionId+"]").remove();
+    }
+
+    // 编辑角色点击了取消按钮
+    function editNewRoleCancel(btnEle){
+        $(btnEle).parents("tr").find("td").toggle();
+    }
+
+    // 编辑角色信息操作
+    function editRoleMess(trId){
+        $(trId).find("td").toggle();
+    }
+
+    // 新增角色
+    function addNewRole(){
+        var newRow = $("#addNewRowTr");
+        newRow.find("input").text("");
+        newRow.show();
+    }
+
+    // 新增角色点击了取消按钮
+    function addNewRoleCancel(btnEle){
+        $("#addNewRowTr").hide();
+    }
+
+    // 删除角色
+    function delRole(roleId, roleName){
+        delNotice("${rolePre}del.do?id="+roleId, {});
+    }
+
+    // 刷新select中option选项
+    function refreshSelectOption(){
+
     }
 </script>
 

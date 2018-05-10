@@ -1,5 +1,6 @@
 package com.yinian.autooa.service.system;
 
+import com.yinian.autooa.common.ApiResponse;
 import com.yinian.autooa.model.SysMenu;
 
 import java.util.List;
@@ -61,4 +62,11 @@ public interface SysMenuService {
      * @return
      */
     List<SysMenu> listAllSysMenuByAccount(String account);
+
+    /**
+     * 检查菜单的可用性
+     * @param menu
+     * @return
+     */
+    ApiResponse menuCheck(SysMenu menu);
 }

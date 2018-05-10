@@ -39,7 +39,7 @@
                     ${execution.processInstanceId}
                 </td>
                 <td>
-                    ${execution.processDefinitionName}
+                    ${outputVO.definitionMap[execution.processDefinitionId].name}
                 </td>
                 <td>
                     ${execution.processDefinitionId}

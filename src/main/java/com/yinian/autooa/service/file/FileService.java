@@ -20,11 +20,11 @@ public interface FileService {
 
     void uploadFile(MultipartFile file, SysUser user, Integer parentId, Integer shareType);
 
-    void deleteByFileIdStr(String fileIdStr);
+    void deleteByFileIdStr(String fileIdStr, SysUser user);
 
     void addNewFolder(File file, SysUser user);
 
-    void changeFileShareType(String fileIdStr, Integer shareType);
+    void changeFileShareType(String fileIdStr, Integer shareType, SysUser user);
 
     void renameFileName(Integer fileId, String fileName, SysUser user);
 
@@ -33,4 +33,6 @@ public interface FileService {
     Integer getFileParentId(Integer fileId);
 
     ResponseEntity<byte[]> downloadFileByFileId(Integer fileId);
+
+    void changeFileOwner(String fileIdStr, Integer userId, String userName, SysUser user);
 }

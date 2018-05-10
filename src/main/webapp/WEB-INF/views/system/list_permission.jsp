@@ -34,7 +34,7 @@
 <%--菜单栏--%>
 <div class="row">
     <ul style="text-decoration: none;">
-        <li><button class="btn btn-primary" onclick="javascript:$('#addPermissionModal').show(1000);">添加权限配置</button></li>
+        <%--<li><button class="btn btn-primary" onclick="javascript:$('#addPermissionModal').show(1000);">添加权限配置</button></li>--%>
     </ul>
 </div>
 <%--权限列表--%>
@@ -56,9 +56,9 @@
                 <td>${item.permission_code}</td>
                 <td>${item.permission_name}</td>
                 <td>
-                    <button class="btn btn-primary btn-sm">关联菜单</button>
+                   <%-- <button class="btn btn-primary btn-sm">关联菜单</button>
                     <button class="btn btn-primary btn-sm">编辑权限信息</button>
-                    <button class="btn btn-danger btn-sm">删除权限信息</button>
+                    <button class="btn btn-danger btn-sm">删除权限信息</button>--%>
                 </td>
             </tr>
         </c:forEach>

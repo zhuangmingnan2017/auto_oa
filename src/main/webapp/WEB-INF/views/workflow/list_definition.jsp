@@ -46,10 +46,10 @@
                     <span class="glyphicon glyphicon-off"></span>
                     启动
                 </button>
-                <button class="btn btn-primary">
+                <%--<button class="btn btn-primary">
                     <span class="glyphicon glyphicon-lock"></span>
                     挂起
-                </button>
+                </button>--%>
                 <form action="${definitionPre}del.html" method="post" id="delFormEle">
 										<input type='hidden' value='${item.deploymentId}' name='deploymentId'>
                     <button class="btn btn-danger" type="button" onclick="delDefinition(this);">

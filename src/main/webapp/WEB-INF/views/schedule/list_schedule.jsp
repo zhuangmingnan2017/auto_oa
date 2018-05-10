@@ -45,7 +45,7 @@
     </div>
     <div class="row">
         <h3><a href="#" onclick="toggleDiv(this);" class="glyphicon glyphicon-upload"></a>我的日程</h3>
-        <p><button class="btn btn-default btn-sm"  onclick="addSchedule('my');">新增我的日程</button><small>（仅自己可见可见）</small></p>
+        <p><button class="btn btn-default btn-sm"  onclick="addSchedule('my');">新增我的日程</button><small>（仅自己可见）</small></p>
         <hr />
     </div>
     <div class="row" id="my_schedule_row">
@@ -90,14 +90,14 @@
                     <div class="form-group">
                         <label for="modal_schedule_start_datetime" class="col-sm-2 control-label">日程开始时间</label>
                         <div class="col-md-10 date inline">
-                            <input type="text" class="form-control" id="modal_schedule_start_datetime" name="start_datetime">
+                            <input type="text" class="form-control datepicker2" id="modal_schedule_start_datetime" name="start_datetime">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                         </div>
                     </div>
                     <div class="form-group">
                         <label for="modal_schedule_end_datetime" class="col-sm-2 control-label">日程结束时间</label>
                         <div class="col-md-10 date inline">
-                            <input type="text" class="form-control" id="modal_schedule_end_datetime" name="end_datetime">
+                            <input type="text" class="form-control datepicker2" id="modal_schedule_end_datetime" name="end_datetime">
                             <span class="input-group-addon"><i class="glyphicon glyphicon-th"></i></span>
                         </div>
                     </div>
@@ -132,6 +132,11 @@
 
         // 加载用户日程
         loadCurrUserSchedule();
+
+        $(".datepicker2").datetimepicker({
+            format: 'YYYY-MM-DD',//显示格式
+            locale: 'zh-cn'
+        });
     });
 
     function toggleDiv(ele){
@@ -169,15 +174,6 @@
     // 初始化模态框
     function initAddNewScheduleModal(){
         var modal = $("#addScheduleModal");
-
-        $(modal).find(".date").datepicker({
-            lang:"ch", //语言选择中文 注：旧版本 新版方法：$.datetimepicker.setLocale('ch');
-            format:"yyyy-mm-dd",      //格式化日期
-            timepicker:false,    //关闭时间选项
-            yearStart:1990,     //设置最小年份
-            yearEnd:2050,        //设置最大年份
-            todayButton:false    //关闭选择今天按钮
-        });
 
         modal.find("input").val("");
         modal.find("textarea").val("");
@@ -234,7 +230,7 @@
             var deptEle =  $("#dept_schedule_row");
             deptEle.html("");
             $.each(data.data.dept, function (index, content) {
-                deptEle.append(getScheduleDivHtml(content.title, content.start_datetime, content.end_datetime, content.id));
+                deptEle.append(getScheduleDivHtml(content.title, content.start_datetime, content.end_datetime, content.id, content.content));
             });
             if(data.data.dept.length === 0){
                 deptEle.append($("<h4 style='color:grey;'>没有更多内容了哦!</h4>"));
@@ -244,7 +240,7 @@
             var myEle =  $("#my_schedule_row");
             myEle.html("");
             $.each(data.data.my, function (index, content) {
-                myEle.append(getScheduleDivHtml(content.title, content.start_datetime, content.end_datetime, content.id));
+                myEle.append(getScheduleDivHtml(content.title, content.start_datetime, content.end_datetime, content.id, content.content));
 
             });
             if(data.data.my.length === 0){
@@ -253,7 +249,7 @@
         });
     }
 
-    function getScheduleDivHtml(title, startDatetime, endDatetime, scheduleId){
+    function getScheduleDivHtml(title, startDatetime, endDatetime, scheduleId, content){
         var outOfDateSpanHtml = "<span style='font-size:0.5em;color:green;'>[正常]</span>";
 
         var nowTime = new Date().getTime();
@@ -262,11 +258,12 @@
             isOutOfDate = true;
             outOfDateSpanHtml = "<span style='font-size:0.5em;color:red;'>[已过期]</span>";
         }
-        var eleHtml = "<div class=\"col-md-3\" style=\"cursor:pointer\" onclick='loadSchedule("+scheduleId+")'>\n" +
+        var eleHtml = "<div class=\"col-md-3\" style=\"cursor:pointer\">\n" +
             "            <div class=\"thumbnail\">\n" +
             "                <div class=\"caption\">\n" +
             "                    <h3>"+title+outOfDateSpanHtml+"</h3>\n" +
-            "                    <p>"+UnixToDate(startDatetime,'Y-m-d')+"-->"+UnixToDate(endDatetime,'Y-m-d')+"</p>\n" +
+            "                    <p>"+UnixToDate(startDatetime,'Y-m-d')+" 至 "+UnixToDate(endDatetime,'Y-m-d')+"</p>" +
+            "                    <p>"+content+"</p>"+
             "                    <p><button onclick=\"finishSchedule("+scheduleId+")\" class=\"btn btn-primary\" role=\"button\">完成该日程(可以在历史日程找到)</button></p>\n" +
             "                </div>\n" +
             "            </div>\n" +

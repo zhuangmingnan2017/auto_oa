@@ -8,6 +8,11 @@
 <head>
     <title>可用流程-基于工作流的办公自动化系统</title>
     <%@ include  file="../common/header.jsp"%>
+    <style>
+        .strong{
+            font-weight: bold;
+        }
+    </style>
 </head>
 <body>
 <%@ include  file="../common/barside.jsp"%>
@@ -17,19 +22,19 @@
 
 <table class="table table-hover">
     <tr>
-        <td>流程ID</td>
+        <td class="strong">流程ID</td>
         <td>${instance.id}</td>
-        <td>流程定义ID</td>
+        <td class="strong">流程定义ID</td>
         <td>${instance.processDefinitionId}</td>
-        <td>业务KEY</td>
+        <td class="strong">业务KEY</td>
         <td>${instance.businessKey}</td>
     </tr>
     <tr>
-        <td>流程启动时间</td>
+        <td class="strong">流程启动时间</td>
         <td><fmt:formatDate value="${instance.startTime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
-        <td>流程结束时间</td>
+        <td class="strong">流程结束时间</td>
         <td><fmt:formatDate value="${instance.endTime}" pattern="yyyy-MM-dd HH:mm:ss" /></td>
-        <td>流程状态</td>
+        <td class="strong">流程状态</td>
         <td>
             <c:if test="${instance.endTime == null}">
                 未结束
@@ -46,14 +51,14 @@
 <table class="table table-hover">
     <thead>
     <tr>
-        <td>序号</td>
-        <td>活动ID</td>
-        <td>活动名称</td>
-        <td>任务ID</td>
-        <td>办理人</td>
-        <td>活动开始时间</td>
-        <td>活动结束时间</td>
-        <td>活动耗时（秒）</td>
+        <td class="strong">序号</td>
+        <td class="strong">活动ID</td>
+        <td class="strong">活动名称</td>
+        <td class="strong">任务ID</td>
+        <td class="strong">办理人</td>
+        <td class="strong">活动开始时间</td>
+        <td class="strong">活动结束时间</td>
+        <td class="strong">活动耗时（秒）</td>
     </tr>
     </thead>
     <tbody>
@@ -93,10 +98,10 @@
 <table class="table table-hover">
     <thead>
     <tr>
-        <td>序号</td>
-        <td>变量名称</td>
-        <td>变量类型</td>
-        <td>值</td>
+        <td class="strong">序号</td>
+        <td class="strong">变量名称</td>
+        <td class="strong">变量类型</td>
+        <td class="strong">值</td>
     </tr>
     </thead>
     <tbody>

@@ -22,7 +22,7 @@ public class OaDefinitionServiceImpl extends BaseService implements OaDefinition
     @Override
     public List<ProcessDefinition> listAllDefinition() {
         return repositoryService.createProcessDefinitionQuery()
-                .orderByDeploymentId().desc()
+                .orderByProcessDefinitionVersion().desc()
                 .list();
     }
 

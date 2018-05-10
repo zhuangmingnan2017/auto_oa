@@ -1,11 +1,15 @@
 package com.yinian.autooa.service.impl.system;
 
+import com.yinian.autooa.common.ApiResponse;
+import com.yinian.autooa.common.XMsg;
 import com.yinian.autooa.dao.autocode.SysMenuMapper;
 import com.yinian.autooa.model.SysMenu;
 import com.yinian.autooa.model.SysMenuExample;
 import com.yinian.autooa.model.SysPermission;
-import com.yinian.autooa.service.system.SysPermissionService;
 import com.yinian.autooa.service.system.SysMenuService;
+import com.yinian.autooa.service.system.SysPermissionService;
+import com.yinian.autooa.vo.output.common.BooleanOutWithMsg;
+import jodd.util.StringUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -69,6 +73,7 @@ public class SysMenuServiceImpl implements SysMenuService {
      */
     @Override
     public void addNewSysMenu(SysMenu menu) {
+        assert menu != null;
         sysMenuMapper.insertSelective(menu);
 
         // 新增菜单的时候顺便配置权限
@@ -141,5 +146,50 @@ public class SysMenuServiceImpl implements SysMenuService {
         example.createCriteria().andPermissionIn(permissionStrList);
 
         return sysMenuMapper.selectByExample(example);
+    }
+
+    @Override
+    public ApiResponse menuCheck(SysMenu menu) {
+        ApiResponse response = new ApiResponse(XMsg.FAIL);
+
+        BooleanOutWithMsg booleanOutWithMsg = isMenuValid(menu);
+        if(booleanOutWithMsg.isSuccess()){
+            return null;
+        }
+
+        response.setData(booleanOutWithMsg.getMessage());
+        return response;
+    }
+
+    /**
+     * 菜单可用性检查
+     * @param menu
+     * @return
+     */
+    private BooleanOutWithMsg isMenuValid(SysMenu menu){
+        // 菜单为空
+        if(menu == null){
+            return BooleanOutWithMsg.fail("菜单为空");
+        }
+
+        // 菜单名称、权限编码为空
+        if(StringUtil.isBlank(menu.getName()) || StringUtil.isBlank(menu.getPermission())){
+            return BooleanOutWithMsg.fail("菜单名称/权限编码为空");
+        }
+
+        SysMenuExample example = new SysMenuExample();
+        SysMenuExample.Criteria criteria1 = example.or().andPermissionEqualTo(menu.getPermission());
+        SysMenuExample.Criteria criteria2 = example.or().andNameEqualTo(menu.getName());
+        // if the operation is update, exclude itself to judge the repeat;
+        if(menu.getId() != null){
+            criteria1.andIdNotEqualTo(menu.getId());
+            criteria2.andIdNotEqualTo(menu.getId());
+        }
+
+        if(sysMenuMapper.countByExample(example) <= 0){
+            return BooleanOutWithMsg.success();
+        }
+
+        return BooleanOutWithMsg.fail("菜单名称/权限编码重复");
     }
 }

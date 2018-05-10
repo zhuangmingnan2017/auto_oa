@@ -15,6 +15,8 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.util.List;
 
 /**
@@ -75,47 +77,75 @@ public class FileController extends BaseController {
 
     @PostMapping("uploadFile.html")
     public ModelAndView uploadFile(@RequestParam(value="file",required=false) MultipartFile file,
-                                   HttpSession session, Integer parentId, Integer shareType){
+                                   HttpSession session, Integer parentId, Integer shareType) throws UnsupportedEncodingException {
         if(parentId == null){
             parentId = 0;
         }
 
-        ModelAndView mv = new ModelAndView("redirect:list.html?parentId="+parentId);
+        String viewName = "redirect:list.html?parentId="+parentId;
+        ModelAndView mv = new ModelAndView();
 
         SysUser user = (SysUser)session.getAttribute("user");
         if(user == null){
+            mv.setViewName(viewName);
             return mv;
         }
 
-        fileService.uploadFile(file, user, parentId, shareType);
+        try{
+            fileService.uploadFile(file, user, parentId, shareType);
+        }catch (RuntimeException e){
+            viewName += "&errmsg="+ URLEncoder.encode(e.getMessage(), "UTF-8");
+        }
+        mv.setViewName(viewName);
         return mv;
     }
 
     @PostMapping("del.do")
     @ResponseBody
-    public ApiResponse delFileById(String fileIdStr){
-        fileService.deleteByFileIdStr(fileIdStr);
+    public ApiResponse delFileById(String fileIdStr, HttpSession session){
+        SysUser user = getSessionUser(session);
+
+        fileService.deleteByFileIdStr(fileIdStr, user);
         return ApiResponse.getDefaultResponse();
     }
 
     @PostMapping("add_folder.html")
-    public ModelAndView addNewFolder(File file,HttpSession session){
+    public ModelAndView addNewFolder(File file,HttpSession session) throws UnsupportedEncodingException {
         Integer parentId = file.getParent_id()==null?0:file.getParent_id();
-        ModelAndView mv = new ModelAndView("redirect:list.html?parentId="+parentId);
+        String viewName = "redirect:list.html?parentId="+parentId;
+        ModelAndView mv = new ModelAndView();
         SysUser user = (SysUser)session.getAttribute("user");
         if(user == null){
+            mv.setViewName(viewName);
             return mv;
         }
 
-        fileService.addNewFolder(file, user);
+        try{
+            fileService.addNewFolder(file, user);
+        }catch (RuntimeException e){
+            viewName += "&errmsg="+ URLEncoder.encode(e.getMessage(), "UTF-8");
+        }
+        mv.setViewName(viewName);
         return mv;
     }
 
     @PostMapping("change_share_type.html")
-    public ModelAndView changeShareType(String fileIdStr, Integer shareType, Integer parentId){
+    public ModelAndView changeShareType(String fileIdStr, Integer shareType, Integer parentId, HttpSession session){
         ModelAndView mv = new ModelAndView("redirect:list.html?parentId="+parentId);
 
-        fileService.changeFileShareType(fileIdStr, shareType);
+        SysUser user = getSessionUser(session);
+
+        fileService.changeFileShareType(fileIdStr, shareType, user);
+
+        return mv;
+    }
+
+    @PostMapping("change_owner.html")
+    public ModelAndView changeOwner(Integer userId, String userName, String fileIdStr, Integer parentId, HttpSession session){
+        ModelAndView mv = new ModelAndView("redirect:list.html?parentId="+parentId);
+
+        SysUser user = getSessionUser(session);
+        fileService.changeFileOwner(fileIdStr, userId, userName, user);
 
         return mv;
     }

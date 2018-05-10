@@ -38,8 +38,7 @@ public class SysRoleController extends BaseController {
     }
 
     @PostMapping("add_or_update.do")
-    @ResponseBody
-    public ApiResponse addOrUpdate(@RequestBody SysRole role){
+    public String addOrUpdate(SysRole role){
         // 有id，则编辑
         if(role.getId() != null && role.getId() > 0){
             sysRoleService.updateSelectiveById(role, role.getId());
@@ -47,7 +46,8 @@ public class SysRoleController extends BaseController {
             // 没有id，则新增
             sysRoleService.addNew(role);
         }
-        return ApiResponse.getDefaultResponse();
+
+        return "redirect:list.html";
     }
 
     @PostMapping("del.do")

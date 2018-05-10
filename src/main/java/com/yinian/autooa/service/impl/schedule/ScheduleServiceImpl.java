@@ -97,6 +97,6 @@ public class ScheduleServiceImpl extends BaseService implements ScheduleService 
             criteria.andStatusIn(statusList);
         }
         example.setOrderByClause(" id desc ");
-        return scheduleMapper.selectByExample(example);
+        return scheduleMapper.selectByExampleWithBLOBs(example);
     }
 }

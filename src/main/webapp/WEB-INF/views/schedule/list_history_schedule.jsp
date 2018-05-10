@@ -208,7 +208,7 @@
             "            <div class=\"thumbnail\">\n" +
             "                <div class=\"caption\">\n" +
             "                    <h3>"+title+outOfDateSpanHtml+"</h3>\n" +
-            "                    <p>"+UnixToDate(startDatetime,'Y-m-d')+"-->"+UnixToDate(endDatetime,'Y-m-d')+"</p>\n" +
+            "                    <p>"+UnixToDate(startDatetime,'Y-m-d')+" 至 "+UnixToDate(endDatetime,'Y-m-d')+"</p>\n" +
             /*"                    <p><button onclick=\"finishSchedule("+scheduleId+")\" class=\"btn btn-primary\" role=\"button\">完成该日程(可以在历史日程找到)</button></p>\n" +*/
             "                </div>\n" +
             "            </div>\n" +

@@ -1,9 +1,11 @@
 package com.yinian.autooa.controller.system;
 
 import com.yinian.autooa.common.ApiResponse;
+import com.yinian.autooa.common.XMsg;
 import com.yinian.autooa.controller.BaseController;
 import com.yinian.autooa.model.SysMenu;
 import com.yinian.autooa.service.system.SysMenuService;
+import jodd.util.ObjectUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -42,6 +44,12 @@ public class SysMenuController extends BaseController {
     @PostMapping("add_or_update.do")
     @ResponseBody
     public ApiResponse addNewMenu(@RequestBody SysMenu menu){
+        // 菜单可用性检查
+        ApiResponse apiResponse = sysMenuService.menuCheck(menu);
+        if(apiResponse != null){
+            return apiResponse;
+        }
+
         // 有id，则编辑
         if(menu.getId() != null && menu.getId() > 0){
             sysMenuService.updateSelectiveSysMenuById(menu, menu.getId());
