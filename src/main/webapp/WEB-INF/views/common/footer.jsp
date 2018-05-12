@@ -191,8 +191,8 @@
     $(function () {
         //日期插件
         $(".datepicker").datetimepicker({
-            //format: 'yyyy-mm-dd hh:ii:ss',//显示格式
-            locale: 'zh-cn'
+            format: 'YYYY-MM-DD HH:mm'//显示格式
+            //locale: 'zh-cn'
         });
 
     });

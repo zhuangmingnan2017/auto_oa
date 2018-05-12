@@ -25,8 +25,8 @@ import java.util.Properties;
 public class Client extends PHPFunctions{
 
 	public static boolean IN_UC = true;
-	public static String UC_IP = "127.0.0.1";
-	public static String UC_API = "http://localhost/discuz/uc_server";
+	public static String UC_IP = "";
+	public static String UC_API = "http://127.0.0.1/bbs/uc_server";
 	public static String UC_CONNECT = "";
 	public static String UC_KEY = "java_ucenter";
 	public static String UC_APPID = "2";

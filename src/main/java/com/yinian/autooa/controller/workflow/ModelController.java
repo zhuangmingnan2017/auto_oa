@@ -58,9 +58,9 @@ public class ModelController extends BaseController {
     }
 
     @PostMapping("del.html")
-    public String delModelById(String modelId){
+    public ApiResponse delModelById(String modelId){
         oaModelService.delModelByModelId(modelId);
-        return "redirect:list.html";
+        return ApiResponse.getDefaultResponse();
     }
 
     @PostMapping("deploy.do")
